@@ -6,7 +6,7 @@ def get_connection():
     connection = mysql.connector.connect(
         host="localhost",
         user="sysadmin",
-        password="1990",
+        password="0000",
         database="job_tracker"
     )
 
