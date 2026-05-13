@@ -41,6 +41,7 @@ job-tracker/
 │   └── menu.py
 │
 ├── sql/
+│   ├── diagram.png!
 │   ├── schema.sql
 │   └── table_structure.txt
 │
@@ -62,6 +63,9 @@ Tabelle principali:
 - recruiters
 - interviews
 
+[Diagrama EER](sql/diagram.png)
+
+ 
 ---
 
 ## Obiettivi del progetto
