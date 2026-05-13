@@ -1,41 +1,49 @@
-enterprise:
+enterprise: ✅
 id
 name
 created_at
 updated_at
 
-job:
+job: ✅
 id
-name
+position
+description
 date_opening
 date_closing
 enterprise_id
 created_at
 updated_at
 
-job_application:
+job_application: ✅
 id
 job_id
 candidate_id
 date_application
-status_approved_id
+application_status_id
 created_at
 updated_at
 
-job_recruiter:
+job_recruiter: ✅
 id
 job_id
 recruiter_id
 created_at
 updated_at
 
-recruiter:
+recruiter: ✅
 id
 name
+type_recruiter_id
 created_at
 updated_at
 
-interview:
+type_recruiter: ✅
+id
+type
+created_at
+updated_at
+
+interview: ✅
 id
 job_application_id
 date
@@ -43,50 +51,53 @@ status_interview_id
 created_at
 updated_at
 
-interview_recruiter:
-id recruiter_id
+interview_recruiter: ✅
+id
+recruiter_id
 interview_id
 observer
 created_at
 updated_at
 
-application_status:
+application_status: ✅
 id
 name_status
 created_at
 updated_at
 
-status_interview:
+status_interview: ✅
 id
 name_status
 created_at
 updated_at
 
-candidate:
+candidate: ✅
 id
 name
-fone
+phone
 email
 address
 linkedin
-date_registration
 created_at
 updated_at
 
-candidate_training:
+candidate_training: ✅
 id
 candidate_id
 description
 training_type_id
 date_start
 date_end
-training_type:
+created_at
+updated_at
+
+training_type: ✅
 id
 description
 created_at
 updated_at
 
-candidate_experience:
+candidate_experience: ✅
 id
 candidate_id
 enterprise
@@ -97,7 +108,7 @@ description
 created_at
 updated_at
 
-candidate_language:
+candidate_language: ✅
 id
 language_id
 level_language_id
@@ -105,26 +116,26 @@ candidate_id
 created_at
 updated_at
 
-language:
+language: ✅
 id
 description
 created_at
 updated_at
 
-level_language:
+level_language: ✅
 id
 description
 created_at
 updated_at
 
-candidate_skill:
+candidate_skill: ✅
 id
 skill_id
 candidate_id
 created_at
 updated_at
 
-skill:
+skill: ✅
 id
 description
 created_at

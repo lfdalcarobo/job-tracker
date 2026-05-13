@@ -6,10 +6,10 @@ try:
     connection = get_connection()
 
     if connection.is_connected():
-        print("Conectado ao MySQL com sucesso!")
+        print("Successfully connected to MySQL!")
 
 except Exception as error:
-    print("Erro ao conectar:", error)
+    print("Error connecting:", error)
 
 finally:
     if 'connection' in locals() and connection.is_connected():
