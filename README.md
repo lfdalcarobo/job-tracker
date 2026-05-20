@@ -63,7 +63,7 @@ Tabelle principali:
 - recruiters
 - interviews
 
-[Diagrama EER](sql/diagram.png)
+[Diagramma EER](sql/diagram.png)
 
  
 ---
