@@ -1,16 +1,27 @@
-from database import get_connection
+from flask import Flask
 
-# Conexão com a database
+from app.routes import candidate_routes
 
-try:
-    connection = get_connection()
+from app.routes.enterprise_routes import enterprise_routes
+from app.routes.job_routes import job_routes
+from app.routes.recruiter_routes import recruiter_routes
+from app.routes.candidate_routes import candidate_routes
 
-    if connection.is_connected():
-        print("Successfully connected to MySQL!")
+# cria o app Flask
+app = Flask(__name__)
 
-except Exception as error:
-    print("Error connecting:", error)
+# registra as rotas externas (Blueprints)
 
-finally:
-    if 'connection' in locals() and connection.is_connected():
-        connection.close()
+app.register_blueprint(enterprise_routes)
+app.register_blueprint(job_routes)
+app.register_blueprint(recruiter_routes)
+app.register_blueprint(candidate_routes)
+
+# rota principal (home)
+@app.route("/")
+def home():
+    return "<h1>Job Tracker under development</h1>"
+
+# inicia o servidor
+if __name__ == "__main__":
+    app.run(debug=True)

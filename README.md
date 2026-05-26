@@ -41,7 +41,7 @@ job-tracker/
 │   └── menu.py
 │
 ├── sql/
-│   ├── diagram.png!
+│   ├── diagram.png
 │   ├── schema.sql
 │   └── table_structure.txt
 │
@@ -57,13 +57,13 @@ job-tracker/
 Il database utilizza MySQL con modellazione relazionale.
 
 Tabelle principali:
-- candidates
-- companies
-- jobs
-- recruiters
-- interviews
+- candidate
+- enterprise
+- job
+- recruiter
+- interview
 
-[Diagrama EER](sql/diagram.png)
+[Diagram EER](sql/diagram.png)
 
  
 ---
@@ -80,7 +80,7 @@ Questo progetto è stato creato per:
 
 ## Stato del progetto
 
-In sviluppo 🚧
+In sviluppo
 
 Attualmente:
 - configurazione ambiente completata
