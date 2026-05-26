@@ -63,7 +63,11 @@ Tabelle principali:
 - recruiter
 - interview
 
+<<<<<<< HEAD
 [Diagram EER](sql/diagram.png)
+=======
+[Diagramma EER](sql/diagram.png)
+>>>>>>> 0dbbef93bc1cf77d350267f4d2db16a5b475d0cb
 
  
 ---
