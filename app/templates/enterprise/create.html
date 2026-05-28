@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Enterprise</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body>
+
+    <h1>Create Enterprise</h1>
+
+    <a href="{{ url_for('enterprise_routes.list_enterprises') }}">Back</a>
+
+    <hr>
+
+    <form method="POST" action="{{ url_for('enterprise_routes.create_enterprise') }}">
+
+        <label for="name">Name:</label>
+        <input type="text" name="name" id="name" required>
+
+        <br><br>
+
+        <label for="situation">Situation:</label>
+        <select name="situation" id="situation" required>
+            <option value="A">ACTIVE</option>
+            <option value="I">INACTIVE</option>
+        </select>
+
+        <br><br>
+
+        <button type="submit">Save</button>
+
+    </form>
+
+</body>
+</html>
