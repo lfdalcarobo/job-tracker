@@ -4,6 +4,6 @@ enterprise_routes = Blueprint("enterprise_routes",__name__,url_prefix="/enterpri
 
 # importa apenas as rotas (elas devem usar o MESMO blueprint)
 from .create import create_enterprise
-from .update import update_enterprise
+from .edit import edit_enterprise
 from .list import list_enterprises
-from .view import view_enterprise
+from .view import get_enterprise_by_id

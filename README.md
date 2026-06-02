@@ -4,29 +4,44 @@
 
 Job Tracker è un progetto personale sviluppato in Python con database MySQL per gestire candidature di lavoro, aziende, recruiter e colloqui.
 
-L'obiettivo del progetto è praticare lo sviluppo backend, la modellazione relazionale di database e l'integrazione tra Python e MySQL, seguendo una struttura organizzata e professionale.
+Il progetto è nato con focus backend, ma si è evoluto in una **web application completa utilizzando Flask**, includendo anche un'interfaccia frontend per la gestione dei dati.
+
+L'obiettivo è praticare sviluppo backend, modellazione relazionale, integrazione Python ↔ MySQL e sviluppo di applicazioni web full-stack.
 
 ---
 
 ## Tecnologie utilizzate
 
 - Python
+- Flask
 - MySQL
+- HTML (Jinja2 templates)
+- CSS (base)
 - MySQL Workbench
-- PyCharm
+- PyCharm / VS Code
 - Git e GitHub
 
 ---
 
-## Funzionalità previste
+## Funzionalità implementate
 
-- Gestione candidature
-- Gestione aziende
+### Backend
+- Gestione aziende (CRUD completo)
+- Gestione candidati
 - Gestione recruiter
+- Gestione job
 - Gestione colloqui
-- Aggiornamento stato candidatura
-- Ricerca candidature
-- Report e statistiche
+- Aggiornamento stato candidature
+- Query SQL dinamiche
+
+### Frontend (Flask Web UI)
+- Lista aziende con filtri (nome e situazione)
+- Creazione e modifica aziende
+- View dettagli azienda
+- Navigazione tra pagine (list / view / edit)
+- Form riutilizzabile per create e edit
+- Controllo stato ACTIVE / INACTIVE
+- Redirect dinamici in base al flusso utente
 
 ---
 
@@ -38,7 +53,23 @@ job-tracker/
 ├── app/
 │   ├── main.py
 │   ├── database.py
-│   └── menu.py
+│   │
+│   ├── repositories/
+│   │   └── enterprise_repository.py
+│   │
+│   ├── routes/
+│   │   └── enterprise/
+│   │       ├── create.py
+│   │       ├── edit.py
+│   │       ├── list.py
+│   │       ├── view.py
+│   │       └── enterprise_routes.py
+│   │
+│   └── templates/
+│       └── enterprise/
+│           ├── form.html
+│           ├── list.html
+│           └── view.html
 │
 ├── sql/
 │   ├── diagram.png
@@ -49,43 +80,6 @@ job-tracker/
 ├── README.md
 └── .gitignore
 ```
-
----
-
-## Database
-
-Il database utilizza MySQL con modellazione relazionale.
-
-Tabelle principali:
-- candidate
-- enterprise
-- job
-- recruiter
-- interview
-
-    [Diagramma EER](sql/diagram.png)
-
- 
----
-
-## Obiettivi del progetto
-
-Questo progetto è stato creato per:
-- migliorare le competenze in Python
-- praticare SQL e database relazionali
-- imparare la gestione di progetti backend
-- utilizzare Git e GitHub in modo professionale
-
----
-
-## Stato del progetto
-
-In sviluppo
-
-Attualmente:
-- configurazione ambiente completata
-- connessione Python ↔ MySQL completata
-- modellazione database in corso
 
 ---
 

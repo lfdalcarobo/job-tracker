@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enterprise Details</title>
+</head>
+<body>
+
+    <h1>Enterprise Details</h1>
+
+    <a href="{{ url_for('enterprise_routes.edit_enterprise', id=enterprise.ID, next='view') }}">
+        Edit
+    </a>
+
+    <hr>
+
+    <p>
+        <strong>ID:</strong>
+        {{ enterprise.ID }}
+    </p>
+
+    <p>
+        <strong>Name:</strong>
+        {{ enterprise.NAME }}
+    </p>
+
+    <p>
+        <strong>Situation:</strong>
+        {{ 'Active' if enterprise.SITUATION == 'A' else 'Inactive' }}
+    </p>
+
+    <p>
+        <strong>Created At:</strong>
+        {{ enterprise.CREATED_AT.strftime('%d/%m/%Y %H:%M:%S') }}
+    </p>
+
+    <p>
+        <strong>Updated At:</strong>
+        {{ enterprise.UPDATED_AT.strftime('%d/%m/%Y %H:%M:%S') }}
+    </p>
+
+    <hr>
+
+    <a href="{{ url_for('enterprise_routes.list_enterprises') }}">
+        Back to List
+    </a>
+
+
+</body>
+</html>

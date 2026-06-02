@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Enterprise Form</title>
+</head>
+<body>
+
+<h1>
+    {{ "Edit Enterprise" if enterprise else "Create Enterprise" }}
+</h1>
+
+<form method="POST">
+
+    <label>Name</label>
+    <input type="text"
+           name="name"
+           value="{{ enterprise.NAME if enterprise else '' }}">
+
+    <label>Situation</label>
+
+    <select name="situation">
+
+        <option value="A"
+            {% if enterprise and enterprise.SITUATION == 'A' %}selected{% endif %}>
+            Active
+        </option>
+
+        <option value="I"
+            {% if enterprise and enterprise.SITUATION == 'I' %}selected{% endif %}>
+            Inactive
+        </option>
+
+    </select>
+
+    <button type="submit">
+        {{ "Save" }}
+    </button>
+
+</form>
+
+<br>
+
+<a href="
+{% if enterprise %}
+    {% if next_page == 'view' %}
+        {{ url_for('enterprise_routes.view_enterprise', id=enterprise.ID) }}
+    {% else %}
+        {{ url_for('enterprise_routes.list_enterprises') }}
+    {% endif %}
+{% else %}
+    {{ url_for('enterprise_routes.list_enterprises') }}
+{% endif %}
+">
+    Cancel
+</a>
+
+</body>
+</html>

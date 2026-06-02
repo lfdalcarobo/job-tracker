@@ -1,13 +1,18 @@
-from flask import Blueprint, request, redirect, url_for, render_template
-from app.repositories.enterprise_repository import update_enterprise_db
+from flask import render_template, request, redirect, url_for
 
-enterprise_routes = Blueprint("enterprise_routes", __name__)
+from app.routes.enterprise.enterprise_routes import enterprise_routes
+from app.repositories.enterprise_repository import (
+    get_enterprise_by_id,
+    update_enterprise_db
+)
 
-# UPDATE - Update enterprise
+
 @enterprise_routes.route("/edit/<int:id>", methods=["GET", "POST"])
 def edit_enterprise(id):
 
     enterprise = get_enterprise_by_id(id)
+
+    next_page = request.args.get("next", "list")
 
     if request.method == "POST":
         name = request.form["name"]
@@ -15,9 +20,13 @@ def edit_enterprise(id):
 
         update_enterprise_db(id, name, situation)
 
-        return redirect(url_for(
-            "enterprise_routes.get_enterprise_by_id",
-            id=id
-        ))
+        if next_page == "view":
+            return redirect(url_for("enterprise_routes.view_enterprise", id=id))
+        else:
+            return redirect(url_for("enterprise_routes.list_enterprises"))
 
-    return render_template("enterprise/edit.html", enterprise=enterprise)
+    return render_template(
+        "enterprise/form.html",
+        enterprise=enterprise,
+        next_page=next_page
+    )
