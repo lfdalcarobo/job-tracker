@@ -1,0 +1,128 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h2 style="text-align:center;">
+  {% if experience %} Edit Experience {% else %} New Experience {% endif %}
+</h2>
+
+<form method="POST" style="max-width:800px; margin:0 auto;"
+      action="{% if experience %}
+                {{ url_for('candidate_experience_routes.edit_candidate_experience', id=experience.ID) }}
+              {% else %}
+                {{ url_for('candidate_experience_routes.create_candidate_experience', candidate_id=candidate_id) }}
+              {% endif %}">
+    <div style="display:flex; gap:15px; flex-wrap:wrap; margin-bottom:15px;">
+        <div>
+            <label>Position <span style="color:red">*</span></label><br>
+            <input  type="text" 
+            name="position" 
+            size="100"
+            value="{{ experience.POSITION if experience else '' }}"
+            required>
+        </div>
+        
+        <div> 
+
+            <label>Company <span style="color:red">*</span></label><br>
+            <input type="text" 
+            name="enterprise"
+            size="100"
+            value="{{ experience.ENTERPRISE if experience else '' }}"
+            required>
+        </div>
+    </div>
+
+    <!-- ROW 2 -->
+    <div style="display:flex; gap:15px; flex-wrap:wrap; margin-bottom:15px;">
+        <div>
+
+            <label>Country</label><br>
+            <select name="country_id" 
+            style="width: 250px;">
+
+                <option value=""></option>
+
+                {% for country in countries %}
+                    <option value="{{ country.ID }}"
+                        {% if experience and experience.COUNTRY_ID == country.ID %}selected{% endif %}>
+                        {{ country.NAME }}
+                </option>
+            {% endfor %}
+
+            </select>
+        </div>
+
+        <div>
+
+            <label>Type of location</label><br>
+            <select name="type_location_id" style="width: 250px;">
+
+                <option value=""></option>
+
+                {% for type_location in type_locations %}
+                    <option value="{{ type_location.ID }}"
+                        {% if experience and experience.TYPE_LOCATION_ID == type_location.ID %}selected{% endif %}>
+                        {{ type_location.NAME }}
+                    </option>
+                {% endfor %}
+
+            </select>
+        </div>
+        
+        
+    </div>
+    
+    <!-- ROW 3 -->
+    <div style="display:flex; gap:15px; flex-wrap:wrap; margin-bottom:15px;">
+        <div>
+
+            <label>Start Date <span style="color:red">*</span></label><br>
+            <input  type="month" 
+                    name="start_date"
+            value="{{ experience.START_DATE.strftime('%Y-%m') if experience and experience.START_DATE else '' }}"
+            required>
+        </div>
+        
+        <div>
+            <label>End Date</label><br>
+            <input  type="month" 
+                    name="end_date"
+            value="{{ experience.END_DATE.strftime('%Y-%m') if experience and experience.END_DATE else '' }}">
+        </div>
+    </div>
+
+    <!-- ROW 4 -->
+    <div style="display:flex; gap:15px; flex-wrap:wrap; margin-bottom:15px;">
+        <div>
+            <label>Description</label><br>
+            <textarea name="description" 
+            rows="8" 
+            cols="100">{{ experience.DESCRIPTION if experience else '' }}</textarea>
+        </div>
+    </div>
+
+    <!-- ACTIONS -->
+    <div style="display:flex; justify-content:space-between; margin-top:20px;">
+
+        
+        <!-- Cancel -->
+        <button type="button"
+                onclick="window.location.href='{{ url_for('candidate_routes.view_candidate', id=candidate_id) }}'"
+                style="background-color: rgb(124, 0, 0); color: white; border: none; padding: 8px 14px; border-radius: 6px; cursor: pointer;">
+            Cancel
+        </button>
+
+        <!-- Save -->
+        <button
+        type="submit"
+        style="background-color: rgb(21, 124, 0); color: white; border: none; padding: 8px 14px; border-radius: 6px; cursor: pointer;">
+            Save
+        </button>
+
+    </div>
+
+</form>
+
+
+{% endblock %}

@@ -4,12 +4,12 @@ from app.routes.enterprise.enterprise_routes import enterprise_routes
 from app.repositories.enterprise_repository import create_enterprise_db
 
 
-@enterprise_routes.route("/create", methods=["GET", "POST"])
+@enterprise_routes.route("/new", methods=["GET", "POST"])
 def create_enterprise():
 
     if request.method == "POST":
         name = request.form["name"]
-        situation = request.form["situation"]
+        situation = "A" if request.form.get("situation") == "A" else "I"
 
         new_id = create_enterprise_db(name, situation)
 

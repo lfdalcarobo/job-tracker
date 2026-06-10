@@ -1,19 +1,24 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Enterprise Details</title>
-</head>
-<body>
+{% extends "base.html" %}
 
-    <h1>Enterprise Details</h1>
+{% block content %}
 
-    <a href="{{ url_for('enterprise_routes.edit_enterprise', id=enterprise.ID, next='view') }}">
+<h2 style="text-align:center;">Enterprise Details</h2>
+
+
+<div style="width:100%; text-align:right; margin-bottom:15px;">
+
+    <button>
+    <a class="btn-new-enterprise"
+       href="{{ url_for('enterprise_routes.edit_enterprise', id=enterprise.ID, next='view') }}">
         Edit
     </a>
+    </button>
 
-    <hr>
+</div>
+
+<hr>
+
+<div style="max-width: 600px; margin: 0 auto;">
 
     <p>
         <strong>ID:</strong>
@@ -40,12 +45,9 @@
         {{ enterprise.UPDATED_AT.strftime('%d/%m/%Y %H:%M:%S') }}
     </p>
 
-    <hr>
+</div>
 
-    <a href="{{ url_for('enterprise_routes.list_enterprises') }}">
-        Back to List
-    </a>
+<hr>
 
 
-</body>
-</html>
+{% endblock %}

@@ -1,58 +1,71 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Enterprise Form</title>
-</head>
-<body>
+{% extends "base.html" %}
 
-<h1>
-    {{ "Edit Enterprise" if enterprise else "Create Enterprise" }}
-</h1>
+{% block content %}
 
-<form method="POST">
+<h2 style="text-align:center;">
+    {{ "Edit Enterprise" if enterprise else "New Enterprise" }}
+</h2>
 
-    <label>Name</label>
+<form method="POST" style="max-width: 600px; margin: 0 auto;">
+    
+
+    <label>Name <span style="color:red">*</span></label></label>
     <input type="text"
            name="name"
+           required
+           style="width:100%; padding:6px;"
            value="{{ enterprise.NAME if enterprise else '' }}">
 
-    <label>Situation</label>
+    <br><br>
+    <label>
+        <input type="checkbox"
+               name="situation"
+               value="A"
+               {% if not enterprise or enterprise.SITUATION|trim == 'A' %}checked{% endif %}>
+        Active
+    </label>
 
-    <select name="situation">
+    <br><br>
 
-        <option value="A"
-            {% if enterprise and enterprise.SITUATION == 'A' %}selected{% endif %}>
-            Active
-        </option>
+    <!-- BOTÕES -->
+    <div style="display:flex; justify-content:space-between; margin-top:20px;">
 
-        <option value="I"
-            {% if enterprise and enterprise.SITUATION == 'I' %}selected{% endif %}>
-            Inactive
-        </option>
+        <!-- Cancel -->
+{% if enterprise %}
+    {% if next_page == 'view' %}
+        {% set cancel_url = url_for('enterprise_routes.view_enterprise', id=enterprise.ID) %}
+    {% else %}
+        {% set cancel_url = url_for('enterprise_routes.list_enterprises') %}
+    {% endif %}
+{% else %}
+    {% set cancel_url = url_for('enterprise_routes.list_enterprises') %}
+{% endif %}
 
-    </select>
+<button type="button"
+        onclick="window.location.href='{{ cancel_url }}'"
+        style="background-color: rgb(124, 0, 0);
+               color: white;
+               border: none;
+               padding: 8px 14px;
+               border-radius: 6px;
+               cursor: pointer;">
+    Cancel
+</button>
 
-    <button type="submit">
-        {{ "Save" }}
-    </button>
+
+
+
+        </button>
+
+        <!-- Save -->
+        <button
+        type="submit"
+        style="background-color: rgb(21, 124, 0); color: white; border: none; padding: 8px 14px; border-radius: 6px; cursor: pointer;">
+            Save
+        </button>
+
+    </div>
 
 </form>
 
-<br>
-
-<a href="
-{% if enterprise %}
-    {% if next_page == 'view' %}
-        {{ url_for('enterprise_routes.view_enterprise', id=enterprise.ID) }}
-    {% else %}
-        {{ url_for('enterprise_routes.list_enterprises') }}
-    {% endif %}
-{% else %}
-    {{ url_for('enterprise_routes.list_enterprises') }}
-{% endif %}
-">
-    Cancel
-</a>
-
-</body>
-</html>
+{% endblock %}

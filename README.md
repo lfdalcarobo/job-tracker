@@ -16,9 +16,8 @@ L'obiettivo è praticare sviluppo backend, modellazione relazionale, integrazion
 - Flask
 - MySQL
 - HTML (Jinja2 templates)
-- CSS (base)
 - MySQL Workbench
-- PyCharm / VS Code
+- VS Code
 - Git e GitHub
 
 ---
@@ -27,7 +26,7 @@ L'obiettivo è praticare sviluppo backend, modellazione relazionale, integrazion
 
 ### Backend
 - Gestione aziende (CRUD completo)
-- Gestione candidati
+- Gestione candidati (CRUD in fase di sviluppo)
 - Gestione recruiter
 - Gestione job
 - Gestione colloqui
@@ -55,9 +54,16 @@ job-tracker/
 │   ├── database.py
 │   │
 │   ├── repositories/
+│   │   ├── candidate_repository.py
 │   │   └── enterprise_repository.py
 │   │
 │   ├── routes/
+│   │   ├── candidate/
+│   │       ├── create.py
+│   │       ├── edit.py
+│   │       ├── list.py
+│   │       ├── view.py
+│   │       └── candidate_routes.py
 │   │   └── enterprise/
 │   │       ├── create.py
 │   │       ├── edit.py
@@ -66,6 +72,10 @@ job-tracker/
 │   │       └── enterprise_routes.py
 │   │
 │   └── templates/
+│       ├── candidate/
+│           ├── form.html
+│           ├── list.html
+│           └── view.html
 │       └── enterprise/
 │           ├── form.html
 │           ├── list.html

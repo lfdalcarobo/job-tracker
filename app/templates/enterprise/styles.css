@@ -1,0 +1,19 @@
+.actions-row {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    /* 🔥 ESSENCIAL no seu layout */
+    margin-bottom: 15px;
+}
+
+.btn-back {
+    text-decoration: none;
+    color: #2c3e50;
+    font-weight: bold;
+}
+
+.page-content {
+    width: 100%;
+}

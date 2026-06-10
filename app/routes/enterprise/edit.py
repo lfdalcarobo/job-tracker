@@ -16,7 +16,7 @@ def edit_enterprise(id):
 
     if request.method == "POST":
         name = request.form["name"]
-        situation = request.form["situation"]
+        situation = "A" if request.form.get("situation") == "A" else "I"
 
         update_enterprise_db(id, name, situation)
 

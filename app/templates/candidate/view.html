@@ -1,0 +1,205 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h2 style="text-align:center;">Candidate Details</h2>
+
+<!-- ACTION BUTTONS -->
+<div style="width:100%; text-align:right; margin-bottom:15px;">
+
+
+<button type="button"
+        onclick="window.location.href='{{ url_for('candidate_routes.edit_candidate', id=candidate.ID) }}'"
+        style="background-color: #6163d6;
+               color: white;
+               border: none;
+               padding: 8px 14px;
+               border-radius: 6px;
+               cursor: pointer;">
+    Edit
+</button>
+
+
+
+</div>
+
+<hr>
+
+<!-- CONTENT -->
+<div style="max-width:700px; margin:0 auto;">
+
+    <div class="row" style="margin-bottom:15px;">
+        <strong>Name:</strong>
+        {{ candidate.NAME }}
+
+        &nbsp;&nbsp;&nbsp;
+
+        <strong>Date of Birth:</strong>
+        {{ candidate.DATE_BIRTH.strftime('%d/%m/%Y') if candidate.DATE_BIRTH else '-' }}
+
+        &nbsp;&nbsp;&nbsp;
+
+        <strong>Gender:</strong>
+        {% if candidate.GENDER == 'M' %}
+            Male
+        {% elif candidate.GENDER == 'F' %}
+            Female
+        {% else %}
+            -
+        {% endif %}
+    </div>
+
+    <div class="row" style="margin-bottom:15px;">
+        <strong>Phone:</strong>
+        {{ candidate.PHONE }}
+
+        &nbsp;&nbsp;&nbsp;
+
+        <strong>Email:</strong>
+        {{ candidate.EMAIL }}
+    </div>
+
+    <div class="row" style="margin-bottom:15px;">
+        <strong>Address:</strong>
+        {{ candidate.ADDRESS }}
+
+        &nbsp;&nbsp;&nbsp;
+
+        <strong>City:</strong>
+        {{ candidate.CITY }}
+
+        &nbsp;&nbsp;&nbsp;
+
+        <strong>Country:</strong>
+        {{ candidate.COUNTRY_NAME if candidate.COUNTRY_NAME else candidate.COUNTRY }}
+    </div>
+
+    <div class="row" style="margin-bottom:15px;">
+        <strong>LinkedIn:</strong>
+        {{ candidate.LINKEDIN }}
+    </div>
+
+    
+
+
+
+</div>
+
+<hr>
+
+    <!-- EXPERIENCE HEADER -->
+    <div style="width:100%; text-align:right; margin-bottom:15px;">
+        <h3 style="text-align:center;">Professional Experience</h3>    
+
+    <button type="button"
+            onclick="window.location.href='{{ url_for('candidate_experience_routes.create_candidate_experience', candidate_id=candidate.ID) }}'"
+            style="background-color: rgb(21, 124, 0);
+                color: white;
+                border: none;
+                padding: 8px 14px;
+                border-radius: 6px;
+                cursor: pointer;">
+        + New Experience
+    </button>
+
+    </div>
+
+
+    {% if experiences %}
+
+        {% for experience in experiences %}
+<div style="max-width:700px; 
+            margin:0 auto;
+            border:1px solid #ddd;
+            border-radius:6px;
+            padding:15px;">
+
+    
+
+<div style="width:100%; text-align:right; margin-bottom:5px;">
+    
+
+    <button type="button"
+            onclick="window.location.href='{{ url_for('candidate_experience_routes.edit_candidate_experience',
+    id=experience.ID) }}'"
+            style="background-color: #6163d6;
+                color: white;
+                border: none;
+                padding: 8px 14px;
+                border-radius: 6px;
+                cursor: pointer;">
+        Edit
+    </button>
+    
+<form action="{{ url_for('candidate_experience_routes.delete_candidate_experience', id=experience.ID) }}"
+      method="POST"
+      style="display:inline;">
+    <button type="submit"
+            onclick="return confirm('Delete this experience?');">
+        Delete
+    </button>
+</form>
+
+
+</div>
+
+<div class="row" style="margin-bottom:15px;">
+    <strong>Position:</strong>
+    {{ experience.POSITION }}
+
+</div>
+
+<div class="row" style="margin-bottom:15px;">
+    <strong>Company:</strong>
+    {{ experience.ENTERPRISE }}
+                
+</div>
+
+<div class="row" style="margin-bottom:15px;">
+    <strong>Country:</strong>
+    {{ experience.COUNTRY_NAME if experience.COUNTRY_NAME else experience.COUNTRY }}
+
+</div>
+
+<div class="row" style="margin-bottom:15px;">
+    <strong>Type of Location:</strong>
+    {{ experience.TYPE_LOCATION_NAME if experience.TYPE_LOCATION_NAME else experience.TYPE_LOCATION }}
+                
+</div>
+
+<div class="row" style="margin-bottom:15px;">               
+        <strong>Period:</strong>
+
+        {{ experience.START_DATE.strftime('%m/%Y') }}
+
+        -
+
+        {% if experience.END_DATE %}
+            {{ experience.END_DATE.strftime('%m/%Y') }}
+        {% else %}
+            Current
+        {% endif %}
+    
+</div>
+    {% if experience.DESCRIPTION %}
+
+<div class="row" style="margin-bottom:15px;">
+        <strong>Description:</strong>
+        {{ experience.DESCRIPTION }}
+
+</div>
+
+    {% endif %}
+            </div>
+            
+            <br>
+
+        {% endfor %}
+
+    {% else %}
+
+        <p>No experiences registered.</p>
+
+    {% endif %}
+
+{% endblock %}

@@ -1,8 +1,8 @@
 CREATE DATABASE JOB_TRACKER;
 -- CREATE USER
-CREATE USER 'SYSADMIN'@'LOCALHOST' IDENTIFIED BY '******';
+CREATE USER 'sysadmin'@'localhost' IDENTIFIED BY '******';
 -- PRIVILÉGIOS DO USUÁRIO
-GRANT ALL PRIVILEGES ON JOB_TRACKER.* TO 'SYSADMIN'@'LOCALHOST';
+GRANT ALL PRIVILEGES ON JOB_TRACKER.* TO 'sysadmin'@'localhost';
 
 SHOW DATABASES;
 USE JOB_TRACKER;
@@ -210,3 +210,118 @@ UNIQUE (CANDIDATE_ID, LANGUAGE_ID);
 ALTER TABLE CANDIDATE_SKILL
 ADD CONSTRAINT UK_CANDIDATE_SKILL
 UNIQUE (CANDIDATE_ID, SKILL_ID);
+
+
+--Permissão para criar objetos
+GRANT CREATE ROUTINE ON job_tracker.* TO 'sysadmin'@'localhost';
+GRANT CREATE VIEW ON job_tracker.* TO 'sysadmin'@'localhost';
+GRANT TRIGGER ON job_tracker.* TO 'sysadmin'@'localhost';
+GRANT CREATE ROUTINE, ALTER ROUTINE, CREATE VIEW, TRIGGER ON job_tracker.* TO 'sysadmin'@'localhost';
+SET GLOBAL log_bin_trust_function_creators = 1;
+
+
+-- Function like INITCAP (Oracle)
+DELIMITER $$
+
+CREATE FUNCTION CAPFIRST(texto VARCHAR(255)) 
+RETURNS VARCHAR(255)
+DETERMINISTIC
+BEGIN
+    DECLARE passo INT DEFAULT 1;
+    DECLARE caractere CHAR(1);
+    DECLARE resultado VARCHAR(255) DEFAULT '';
+    DECLARE proxima_maiuscula BOOLEAN DEFAULT TRUE;
+
+    WHILE passo <= LENGTH(texto) DO
+        SET caractere = SUBSTRING(texto, passo, 1);
+
+        IF caractere = ' ' THEN
+            SET proxima_maiuscula = TRUE;
+            SET resultado = CONCAT(resultado, ' ');
+        ELSE
+            IF proxima_maiuscula THEN
+                SET resultado = CONCAT(resultado, UPPER(caractere));
+                SET proxima_maiuscula = FALSE;
+            ELSE
+                SET resultado = CONCAT(resultado, LOWER(caractere));
+            END IF;
+        END IF;
+
+        SET passo = passo + 1;
+    END WHILE;
+
+    RETURN resultado;
+END$$
+
+DELIMITER ;
+
+
+-- Function country name
+DELIMITER $$
+
+CREATE FUNCTION COUNTRY_NAME(p_country_id CHAR(3))
+RETURNS VARCHAR(30)
+DETERMINISTIC
+NO SQL
+BEGIN
+    DECLARE v_country_name VARCHAR(30);
+    
+    SELECT  name
+    INTO    v_country_name
+    FROM    country
+    WHERE   id = p_country_id;
+    
+    RETURN v_country_name;
+END$$
+
+DELIMITER ;
+
+
+-- Incrementando campos na tabela candidate
+ALTER TABLE CANDIDATE
+ADD COLUMN CITY VARCHAR(30) AFTER ADDRESS,
+ADD COLUMN COUNTRY CHAR(3) AFTER CITY,
+ADD CONSTRAINT FK_CANDIDATE_COUNTRY FOREIGN KEY (COUNTRY) REFERENCES COUNTRY (ID);
+
+
+ALTER TABLE CANDIDATE_EXPERIENCE
+RENAME COLUMN DATE_START TO START_DATE,
+RENAME COLUMN DATE_END TO END_DATE;
+
+
+CREATE TABLE TYPE_LOCATION (
+ID INT PRIMARY KEY AUTO_INCREMENT,
+NAME VARCHAR(20) NOT NULL
+);
+
+INSERT INTO TYPE_LOCATION (NAME) 
+VALUES('On-site'),('Remote'),('Hybrid');
+
+ALTER TABLE CANDIDATE_EXPERIENCE
+ADD COLUMN COUNTRY_ID CHAR(3) AFTER POSITION,
+ADD COLUMN TYPE_LOCATION_ID INT,
+ADD CONSTRAINT FK_EXPERIENCE_COUNTRY FOREIGN KEY (COUNTRY_ID) REFERENCES COUNTRY (ID),
+ADD CONSTRAINT FK_EXPERIENCE_TYPE_LOCATION FOREIGN KEY (TYPE_LOCATION_ID) REFERENCES TYPE_LOCATION (ID);
+
+
+DELIMITER $$
+
+CREATE FUNCTION TYPE_LOCATION_NAME(type_location_id CHAR(3)) 
+RETURNS VARCHAR(20)
+DETERMINISTIC
+READS SQL DATA
+BEGIN
+    DECLARE v_name VARCHAR(20);
+
+    -- Busca o nome baseado no ID passado por parâmetro
+    SELECT name 
+    INTO v_name
+    FROM TYPE_LOCATION
+    WHERE id = type_location_id
+    LIMIT 1; -- Garante que retorne apenas uma linha
+
+    -- Retorna o nome encontrado (ou NULL se não encontrar nada)
+    RETURN v_name;
+END$$
+
+DELIMITER ;

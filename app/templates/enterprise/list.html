@@ -1,122 +1,135 @@
-<!DOCTYPE html>
-<html lang="en">
+{% extends "base.html" %}
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Enterprise List</title>
+{% block content %}
 
-    <link rel="stylesheet"
-          href="{{ url_for('static', filename='css/style.css') }}">
-</head>
+<h2 style="text-align:center;">Enterprises</h3>
 
-<body>
+<div style="display:flex; justify-content:space-between; align-items:center; width:100%; margin-bottom:15px;">
 
-<h1>Enterprise List</h1>
+    <!-- ESQUERDA: filtro -->
+    <form method="GET"
+          action="{{ url_for('enterprise_routes.list_enterprises') }}"
+          style="display:flex; gap:10px; align-items:center;">
 
-<a href="{{ url_for('enterprise_routes.create_enterprise') }}">
-    New Enterprise
+        <input type="text"
+               name="name"
+               placeholder="Search by name"
+               size="40"
+               value="{{ name or '' }}">
+
+        <select name="situation" style="padding:6px 10px; width:140px;">
+
+            <option value="A" {% if situation == 'A' %}selected{% endif %}>
+                Active
+            </option>
+
+            <option value="I" {% if situation == 'I' %}selected{% endif %}>
+                Inactive
+            </option>
+
+            <option value="" {% if not situation %}selected{% endif %}>
+                All
+            </option>
+            
+        </select>
+        
+
+        <button
+        type="submit"
+        style="background-color: rgb(21, 124, 0); color: white; border: none; padding: 8px 14px; border-radius: 6px; cursor: pointer;">
+            Filter
+        </button>
+
+        <button type="button"
+                onclick="window.location.href='{{ url_for('enterprise_routes.list_enterprises') }}'"
+                style="background-color: #6c757d;
+                    color: white;
+                    border: none;
+                    padding: 8px 14px;
+                    border-radius: 6px;
+                    cursor: pointer;">
+            Clear
+        </button>
+
+
+    </form>
     
-</a>
+    <!-- DIREITA: botão -->
+    <button type="button"
+            onclick="window.location.href='{{ url_for('enterprise_routes.create_enterprise') }}'"
+            style="background-color: rgb(21, 124, 0);
+                color: white;
+                border: none;
+                padding: 8px 14px;
+                border-radius: 6px;
+                cursor: pointer;">
+        New Enterprise
+    </button>
+</div>
 
-<br><br>
-
-<form method="GET" action="{{ url_for('enterprise_routes.list_enterprises') }}">
-
-    <input type="text"
-           name="name"
-           placeholder="Search by name"
-           value="{{ name or '' }}">
-
-    <select name="situation">
-
-    <option value="A" {% if situation == 'A' %}selected{% endif %}>
-        Active
-    </option>
-
-    <option value="I" {% if situation == 'I' %}selected{% endif %}>
-        Inactive
-    </option>
-
-    <option value="" {% if not situation %}selected{% endif %}>
-        All
-    </option>
-
-</select>
-
-    <button type="submit">Filter</button>
-
-    <a href="{{ url_for('enterprise_routes.list_enterprises') }}">
-        Clear
-    </a>
 
 </form>
 
-    <hr>
 
-    {% if enterprises %}
+{% if enterprises %}
 
-    <table border="1" cellpadding="10">
+<table border="1" cellpadding="10">
 
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Name</th>
-                <th>Situation</th>
-                <th>Created At</th>
-                <th>Updated At</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Situation</th>
+            <th>Created At</th>
+            <th>Updated At</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
 
-        <tbody>
+    <tbody>
 
-            {% for enterprise in enterprises %}
+        {% for enterprise in enterprises %}
 
-            <tr>
+        <tr>
 
-                <td>{{ enterprise.ID }}</td>
+            <td>{{ enterprise.ID }}</td>
 
-                <td>{{ enterprise.NAME }}</td>
+            <td>{{ enterprise.NAME }}</td>
 
-                <td>
-                    {% if enterprise.SITUATION == 'A' %}
-                        Active
-                    {% else %}
-                        Inactive
-                    {% endif %}
-                </td>
+            <td>
+                {% if enterprise.SITUATION == 'A' %}
+                    Active
+                {% else %}
+                    Inactive
+                {% endif %}
+            </td>
 
-                <td>{{ enterprise.CREATED_AT.strftime('%d/%m/%Y %H:%M:%S') }}</td>
+            <td>{{ enterprise.CREATED_AT.strftime('%d/%m/%Y %H:%M:%S') }}</td>
 
-                <td>{{ enterprise.UPDATED_AT.strftime('%d/%m/%Y %H:%M:%S') }}</td>
+            <td>{{ enterprise.UPDATED_AT.strftime('%d/%m/%Y %H:%M:%S') }}</td>
 
-                <td>
+            <td>
+                <a href="{{ url_for('enterprise_routes.view_enterprise', id=enterprise.ID) }}">
+                    View
+                </a>
+                /
+                <a href="{{ url_for('enterprise_routes.edit_enterprise', id=enterprise.ID, next='list') }}">
+                    Edit
+                </a>
+            </td>
 
-                    <a href="{{ url_for('enterprise_routes.view_enterprise', id=enterprise.ID) }}">
-                        View
-                    </a>
-                    <a></a> / </a></a>
-                    <a href="{{ url_for('enterprise_routes.edit_enterprise', id=enterprise.ID, next='list') }}">
-                        Edit
-                    </a>
+        </tr>
 
-                </td>
+        {% endfor %}
 
-            </tr>
+    </tbody>
 
-            {% endfor %}
+</table>
 
-        </tbody>
+{% else %}
 
-    </table>
+<p>No enterprises found.</p>
 
-    {% else %}
+{% endif %}
 
-        <p>No enterprises found.</p>
-
-    {% endif %}
-
-</body>
-
-</html>
+{% endblock %}

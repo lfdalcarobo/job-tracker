@@ -11,6 +11,7 @@ def get_all_enterprises(name=None, situation=None):
         SELECT ID, NAME, SITUATION, CREATED_AT, UPDATED_AT
         FROM enterprise
         WHERE 1=1
+        
     """
 
     params = []
@@ -19,10 +20,14 @@ def get_all_enterprises(name=None, situation=None):
         sql += " AND NAME LIKE %s"
         params.append(f"%{name}%")
 
+
     # ✔ SÓ FILTRA SE NÃO FOR NONE
     if situation:
         sql += " AND SITUATION = %s"
         params.append(situation)
+
+
+    sql += " ORDER BY NAME ASC"
 
     cursor.execute(sql, params)
 
