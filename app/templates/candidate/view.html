@@ -2,7 +2,7 @@
 
 {% block content %}
 
-<h2 style="text-align:center;">Candidate Details</h2>
+<h2 style="text-align:center;">Curriculum</h2>
 
 <!-- ACTION BUTTONS -->
 <div style="width:100%; text-align:right; margin-bottom:15px;">
@@ -87,6 +87,108 @@
 
 <hr>
 
+<!-- TRAINING HEADER -->
+<div style="width:100%; text-align:right; margin-bottom:15px;">
+    <h3 style="text-align:center;">Training</h3>
+
+    <button type="button"
+        onclick="window.location.href='{{ url_for('candidate_training_routes.create_candidate_training', candidate_id=candidate.ID) }}'"
+        style="background-color: rgb(21, 124, 0);
+            color: white;
+            border: none;
+            padding: 8px 14px;
+            border-radius: 6px;
+            cursor: pointer;">
+        + New Training
+    </button>
+</div>
+
+{% if trainings %}
+
+    {% for training in trainings %}
+
+    <div style="max-width:700px; 
+                margin:0 auto;
+                border:1px solid #ddd;
+                border-radius:6px;
+                padding:15px;">
+
+        <!-- BUTTONS -->
+        <div style="width:100%; text-align:right; margin-bottom:5px;">
+
+            <button type="button"
+                onclick="window.location.href='{{ url_for('candidate_training_routes.edit_candidate_training', id=training.id) }}'"
+                style="background-color: #6163d6;
+                    color: white;
+                    border: none;
+                    padding: 8px 14px;
+                    border-radius: 6px;
+                    cursor: pointer;">
+                Edit
+            </button>
+
+            <form action="{{ url_for('candidate_training_routes.delete_candidate_training', id=training.id) }}"
+                  method="POST"
+                  style="display:inline;">
+                <button type="submit"
+                        onclick="return confirm('Delete this training?');"
+                        style="background-color: #dc3545;
+                           color: white;
+                           border: none;
+                           padding: 8px 14px;
+                           border-radius: 6px;
+                           cursor: pointer;">
+                    Delete
+                </button>
+            </form>
+
+        </div>
+
+        <div style="margin-bottom:15px;">
+            <strong>Description:</strong>
+            {{ training.description }}
+        </div>
+
+        <div style="margin-bottom:15px;">
+            <strong>Training type:</strong>
+            {{ training.training_type_name }}
+        </div>
+
+        <div style="margin-bottom:15px;">
+            <strong>Country:</strong>
+            {{ training.country_name if training.country_name else training.country }}
+        </div>
+
+        <div style="margin-bottom:15px;">
+            <strong>Period:</strong>
+
+            {{ training.start_date.strftime('%m/%Y') }}
+
+            -
+
+            {% if training.end_date %}
+                {{ training.end_date.strftime('%m/%Y') }}
+            {% else %}
+                Current
+            {% endif %}
+        </div>
+
+    </div>
+
+    <br>
+
+    {% endfor %}
+
+{% else %}
+
+    <p>No training registered.</p>
+
+{% endif %}
+
+
+<hr>
+
+
     <!-- EXPERIENCE HEADER -->
     <div style="width:100%; text-align:right; margin-bottom:15px;">
         <h3 style="text-align:center;">Professional Experience</h3>    
@@ -135,7 +237,13 @@
       method="POST"
       style="display:inline;">
     <button type="submit"
-            onclick="return confirm('Delete this experience?');">
+            onclick="return confirm('Delete this experience?');"
+            style="background-color: #dc3545;
+               color: white;
+               border: none;
+               padding: 8px 14px;
+               border-radius: 6px;
+               cursor: pointer;">
         Delete
     </button>
 </form>
@@ -201,5 +309,66 @@
         <p>No experiences registered.</p>
 
     {% endif %}
+
+
+<hr>
+
+    <!-- SKILL HEADER -->
+<div style="width: 100%; margin-bottom: 15px;">
+    <h3 style="text-align: center;">Skills</h3>
+
+    <form method="POST" action="{{ url_for('candidate_skill_routes.create_candidate_skill', candidate_id=candidate.ID) }}" id="add-skill-form">
+        <!-- Container ocupando 100% para o botão empurrar até a borda direita da tela -->
+        <div style="width: 100%; display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+            
+            <!-- Select posicionado à esquerda -->
+            <select name="skill_id" required 
+                    style="padding: 8px 12px; 
+                    margin-left: 200px;
+                    font-size: 14px; border-radius: 6px; 
+                    border: 1px solid #ccc; 
+                    width: 500px; 
+                    max-width: 70%;">
+                <option value="" disabled selected>Select a skill...</option>
+                {% for skill in skills %}
+                    <option value="{{ skill.ID if skill.ID else skill.id }}">{{ skill.name }}</option>
+                {% endfor %}
+            </select>
+            
+            <!-- Botão verde na extrema direita da página -->
+            <button type="submit"
+                    style="background-color: rgb(21, 124, 0);
+                           color: white;
+                           border: none;
+                           padding: 8px 14px;
+                           border-radius: 6px;
+                           cursor: pointer;">
+                + Add Skill
+            </button>
+        </div>
+    </form>
+</div>
+
+<!-- LISTA DE SKILLS (MANTÉM O CONTAINER CENTRALIZADO DE 700PX) -->
+<div style="max-width: 700px; margin: 0 auto;">
+    <div class="skills-list" style="display: flex; gap: 10px; flex-wrap: wrap; justify-content: flex-start;">
+        {% for candidate_skill in candidate_skills %}
+            <span style="background-color: #f0f0f0; border: 1px solid #d0d0d0; padding: 6px 14px; border-radius: 6px; display: inline-flex; align-items: center; gap: 10px; font-size: 14px; font-weight: 500; color: #333;">
+                
+                {{ candidate_skill.NAME if candidate_skill.NAME else (candidate_skill.SKILL_NAME if candidate_skill.SKILL_NAME else candidate_skill.name) }}
+
+                <!-- Botão de Deletar Inline -->
+                <form method="POST" action="{{ url_for('candidate_skill_routes.delete_candidate_skill', candidate_id=candidate.ID, id=candidate_skill.ID if candidate_skill.ID else candidate_skill.id) }}" style="display:inline; margin: 0;">
+                    <button type="submit" onclick="return confirm('Remove this skill?');" title="Remove skill" style="border: none; background: none; color: #c00; cursor: pointer; font-weight: bold; font-size: 16px; line-height: 1; padding: 0 2px;">
+                        &times;
+                    </button>
+                </form>
+            </span>
+        {% else %}
+            <p style="color: #777; font-size: 14px; font-style: italic;">No skills registered.</p>
+        {% endfor %}
+    </div>
+</div>
+
 
 {% endblock %}

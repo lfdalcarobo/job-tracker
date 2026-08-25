@@ -325,3 +325,145 @@ BEGIN
 END$$
 
 DELIMITER ;
+
+ALTER TABLE TRAINING_TYPE
+MODIFY COLUMN DESCRIPTION VARCHAR(40) NOT NULL;
+
+
+INSERT INTO TRAINING_TYPE (`DESCRIPTION`) VALUES
+('High School Diploma'),
+('Associate Degree'),
+('Bachelor Degree'),
+('Postgraduate / Specialist'),
+('MBA'),
+('Master Degree'),
+('Doctorate / PhD'),
+('Postdoctorate'),
+('Vocational / Technical'),
+('Short Course / Certificate');
+
+ALTER TABLE CANDIDATE_TRAINING
+RENAME COLUMN DATE_START TO START_DATE,
+RENAME COLUMN DATE_END TO END_DATE;
+
+ALTER TABLE CANDIDATE_TRAINING
+ADD COLUMN COUNTRY_ID CHAR(3) AFTER TRAINING_TYPE_ID,
+ADD CONSTRAINT FK_TRAINING_COUNTRY FOREIGN KEY (COUNTRY_ID) REFERENCES COUNTRY (ID);
+
+--Insert data into skill table
+INSERT INTO SKILL (DESCRIPTION, SITUATION) VALUES
+-- Tech & IT
+('Python Dev', 'A'),
+('Java / Spring', 'A'),
+('Node.js / Express', 'A'),
+('REST API Design', 'A'),
+('Microservices', 'A'),
+('SQL Databases', 'A'),
+('JavaScript', 'A'),
+('TypeScript', 'A'),
+('React.js', 'A'),
+('Vue.js', 'A'),
+('HTML5 & CSS3', 'A'),
+('Docker / Containers', 'A'),
+('CI/CD Pipelines', 'A'),
+('AWS Cloud', 'A'),
+('Linux Admin', 'A'),
+('Git Version Control', 'A'),
+('Cybersecurity', 'A'),
+('QA & Testing', 'A'),
+('Data Analysis', 'A'),
+('Data Modeling', 'A'),
+('Power BI / Tableau', 'A'),
+('ETL Pipelines', 'A'),
+('Machine Learning', 'A'),
+('Data Warehousing', 'A'),
+
+-- Saúde (Health)
+('Patient Care', 'A'),
+('EHR Systems', 'A'),
+('Medical Billing', 'A'),
+('Patient Triage', 'A'),
+('Phlebotomy', 'A'),
+('Infection Control', 'A'),
+('Pharmacology', 'A'),
+('First Aid / CPR', 'A'),
+('Vital Signs', 'A'),
+('Health Data Privacy', 'A'),
+('Emergency Support', 'A'),
+('Medical Terms', 'A'),
+
+-- Contábil & Financeiro (Accounting & Finance)
+('Financial Accounting', 'A'),
+('Cost Accounting', 'A'),
+('Tax Compliance', 'A'),
+('Accounts Payable', 'A'),
+('Accounts Receivable', 'A'),
+('Financial Audit', 'A'),
+('Payroll Processing', 'A'),
+('Ledger Reconcile', 'A'),
+('Budget Forecasting', 'A'),
+('Financial Report', 'A'),
+('Bookkeeping', 'A'),
+('ERP SAP / Oracle', 'A'),
+('Risk Assessment', 'A'),
+
+-- Suprimentos & Logística (Supply Chain & Logistics)
+('Supply Chain Opt', 'A'),
+('Inventory Audit', 'A'),
+('Warehouse Mgmt', 'A'),
+('Distribution Log', 'A'),
+('Vendor Management', 'A'),
+('Procurement', 'A'),
+('Import / Export', 'A'),
+('Demand Planning', 'A'),
+('Fleet Management', 'A'),
+('Negotiation', 'A'),
+('Order Fulfillment', 'A'),
+('MRP Planning', 'A'),
+
+-- Vendas (Sales)
+('B2B Sales Strategy', 'A'),
+('CRM Management', 'A'),
+('Lead Generation', 'A'),
+('Account Management', 'A'),
+('Key Accounts', 'A'),
+('Pipeline Mgmt', 'A'),
+('Consultative Sale', 'A'),
+('Outreach Marketing', 'A'),
+('Deal Closing', 'A'),
+('Market Research', 'A'),
+('Sales Pitching', 'A'),
+
+-- Atendimento (Customer Support)
+('Customer Support', 'A'),
+('Helpdesk Ticketing', 'A'),
+('Customer Success', 'A'),
+('Omnichannel Support', 'A'),
+('Conflict Resolution', 'A'),
+('Call Center Ops', 'A'),
+('Client Relations', 'A'),
+('SLA Tracking', 'A'),
+('Active Listening', 'A'),
+
+-- Segurança (Safety & Security)
+('OSHA Safety', 'A'),
+('Hazard Assessment', 'A'),
+('Workplace Safety', 'A'),
+('Fire Evacuation', 'A'),
+('Physical Security', 'A'),
+('Access Control', 'A'),
+('Incident Report', 'A'),
+('Compliance Mgmt', 'A'),
+('EHS Management', 'A'),
+('Emergency Response', 'A'),
+
+-- Gestão e Outros (Management & General)
+('UI/UX Figma Design', 'A'),
+('Digital Marketing', 'A'),
+('SEO Strategy', 'A'),
+('HR Management', 'A'),
+('Talent Acquisition', 'A'),
+('Agile Methodologies', 'A'),
+('Project Mgmt PMP', 'A'),
+('Office Admin', 'A'),
+('Leadership', 'A');

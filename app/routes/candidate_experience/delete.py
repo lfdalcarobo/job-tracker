@@ -31,6 +31,6 @@ def delete_candidate_experience(id):
         return redirect(url_for("candidate.list_candidates"))
 
     return redirect(url_for(
-        "candidate.view_candidate",
-        id=candidate_id  # ajuste aqui se tua rota usar candidate_id
+        "candidate_routes.view_candidate",
+        id=candidate_id
     ))

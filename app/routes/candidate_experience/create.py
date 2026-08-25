@@ -17,8 +17,8 @@ def create_candidate_experience(candidate_id):
             "candidate_id": candidate_id,
             "position": request.form.get("position"),
             "enterprise": request.form.get("enterprise"),
-            "country_id": request.form.get("country_id"),
-            "type_location_id": request.form.get("type_of_location_id"),
+            "country_id": request.form.get("country_id") or None,
+            "type_location_id": request.form.get("type_of_location_id") or None,
             "start_date": f"{request.form.get('start_date')}-01" if request.form.get("start_date") else None,
             "end_date": f"{request.form.get('end_date')}-01" if request.form.get("end_date") else None,
             "description": request.form.get("description")
