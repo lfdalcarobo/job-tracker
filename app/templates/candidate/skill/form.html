@@ -20,7 +20,7 @@
                 <option value=""></option>
                 {% for item in skills %}
                     <option value="{{ item.ID }}"
-                        {% if candidate_skill and candidate_skill.SKILL_ID == item.id %}selected{% endif %}>
+                        {% if candidate_skill and candidate_skill.SKILL_ID == item.ID %}selected{% endif %}>
                         {{ item.name }}
                     </option>
                 {% endfor %}
