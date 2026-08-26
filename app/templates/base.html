@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
 
     <meta charset="UTF-8">
@@ -8,7 +9,6 @@
     <title>Job Tracker</title>
 
     <style>
-
         * {
             box-sizing: border-box;
         }
@@ -73,7 +73,7 @@
             padding: 25px;
             background-color: white;
             border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.08);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
         }
 
         /* Botões */
@@ -103,68 +103,68 @@
             line-height: 1.6;
             margin-top: 20px;
         }
-
     </style>
 
 </head>
 
 <body>
 
-<div class="layout">
+    <div class="layout">
 
-    <!-- Margem esquerda -->
-    <div class="sidebar"></div>
+        <!-- Margem esquerda -->
+        <div class="sidebar"></div>
 
-    <!-- Área principal -->
-    <div class="main-content">
+        <!-- Área principal -->
+        <div class="main-content">
 
-        <header>
-            <h1>Job Tracker</h1>
-        </header>
+            <header>
+                <h1>Job Tracker</h1>
+            </header>
 
-        <nav>
+            <nav>
 
-            <a href="{{ url_for('candidate_routes.list_candidates') }}">
-                Candidates
-            </a>
+                <a href="{{ url_for('candidate_routes.list_candidates') }}">
+                    Candidates
+                </a>
 
-            <a href="{{ url_for('enterprise_routes.list_enterprises') }}">
-                Enterprises
-            </a>
+                <a href="{{ url_for('enterprise_routes.list_enterprises') }}">
+                    Enterprises
+                </a>
 
-            <a href="#">
-                Recruiters
-            </a>
+                <a href="#">
+                    Recruiters
+                </a>
 
-            <a href="#">
-                Jobs
-            </a>
+                <a href="#">
+                    Jobs
+                </a>
 
-            <a href="#">
-                Interviews
-            </a>
+                <a href="#">
+                    Interviews
+                </a>
 
-        </nav>
+            </nav>
 
-        <div class="page-content">
+            <div class="page-content">
 
-            {% block content %}
-            {% endblock %}
+                {% block content %}
+                {% endblock %}
+
+            </div>
+
+            <!-- FOOTER -->
+            <footer>
+                <div>Job Tracker v0.1.0</div>
+                <div>Developed by Luiz Fernando Dal Carobo Machado</div>
+            </footer>
 
         </div>
 
-        <!-- FOOTER -->
-        <footer>
-            <div>Job Tracker v0.1.0</div>
-            <div>Developed by Luiz Fernando Dal Carobo Machado</div>
-        </footer>
+        <!-- Margem direita -->
+        <div class="sidebar"></div>
 
     </div>
 
-    <!-- Margem direita -->
-    <div class="sidebar"></div>
-
-</div>
-
 </body>
+
 </html>

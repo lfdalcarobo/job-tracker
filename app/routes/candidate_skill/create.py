@@ -6,28 +6,22 @@ from app.repositories.candidate_skill_repository import insert_skill
 
 @candidate_skill_routes.route(
     "/candidate/<int:candidate_id>/new",
-    methods=["GET", "POST"]
+    methods=["POST"]
 )
 def create_candidate_skill(candidate_id):
+    skill_id = request.form.get("skill_id")
 
-    if request.method == "POST":
-
+    if skill_id and skill_id.strip():
         insert_skill(
             candidate_id=candidate_id,
-            skill_id=request.form.get("skill_id")
+            skill_id=int(skill_id)
         )
 
-        return redirect(
-            url_for(
-                "candidate_routes.view_candidate",
-                id=candidate_id
-            )
+    # Adicionado _anchor="skills"
+    return redirect(
+        url_for(
+            "candidate_routes.view_candidate",
+            id=candidate_id,
+            _anchor="skills"
         )
-
-    skills = get_all_skills()
-
-    return render_template(
-        "candidate/skill/form.html",
-        candidate_id=candidate_id,
-        skills=skills
     )

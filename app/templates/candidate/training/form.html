@@ -3,113 +3,95 @@
 {% block content %}
 
 <h2 style="text-align:center;">
-  {% if training %} Edit Training {% else %} New Training {% endif %}
+    {% if training %} Edit Training {% else %} New Training {% endif %}
 </h2>
 
-<form method="POST" style="max-width:800px; margin:0 auto;"
-      action="{% if training %}
+<form method="POST" style="max-width:800px; margin:0 auto;" action="{% if training %}
                 {{ url_for('candidate_training_routes.edit_candidate_training', id=training.id) }}
               {% else %}
                 {{ url_for('candidate_training_routes.create_candidate_training', candidate_id=candidate_id) }}
               {% endif %}">
+
+    <!-- ROW 1 -->
     <div style="display:flex; gap:15px; flex-wrap:wrap; margin-bottom:15px;">
         <div>
             <label>Description <span style="color:red">*</span></label><br>
-            <input  type="text" 
-            name="description" 
-            size="100"
-            value="{{ training.description if experience else '' }}"
-            required>
+            <input type="text" name="description" size="100" value="{{ training.description if training else '' }}"
+                required>
         </div>
-        
     </div>
-    
+
     <!-- ROW 2 -->
     <div style="display:flex; gap:15px; flex-wrap:wrap; margin-bottom:15px;">
         <div>
-    
             <label>Training type <span style="color:red">*</span></label><br>
 
-            <select name="training_type_id" 
-                    style="width: 425px;" 
-                    required>
+            <select name="training_type_id" style="width: 425px;" required>
 
                 <option value=""></option>
 
                 {% for training_type in training_types %}
-                    <option value="{{ training_type.id }}"
-                        {% if training and training.training_type_id == training_type.id %}selected{% endif %}>
-                        {{ training_type.name }}
-                    </option>
+                <option value="{{ training_type.id }}" {% if training and (training.training_type_id==training_type.id
+                    or training.TRAINING_TYPE_ID==training_type.id) %}selected{% endif %}>
+                    {{ training_type.name }}
+                </option>
                 {% endfor %}
 
             </select>
-
         </div>
 
         <div>
-
             <label>Country</label><br>
-            <select name="country_id" 
-                    style="width: 300px;">
+            <select name="country_id" style="width: 300px;">
 
                 <option value=""></option>
 
                 {% for country in countries %}
-                    <option value="{{ country.ID }}"
-                        {% if experience and experience.COUNTRY_ID == country.ID %}selected{% endif %}>
-                        {{ country.NAME }}
+                <option value="{{ country.ID if country.ID else country.id }}" {% if training and
+                    (training.country_id==country.ID or training.COUNTRY_ID==country.ID or
+                    training.country_id==country.id) %}selected{% endif %}>
+                    {{ country.NAME if country.NAME else country.name }}
                 </option>
-            {% endfor %}
+                {% endfor %}
 
             </select>
         </div>
-
-        
-        
     </div>
-    
+
     <!-- ROW 3 -->
     <div style="display:flex; gap:15px; flex-wrap:wrap; margin-bottom:15px;">
         <div>
-
             <label>Start Date <span style="color:red">*</span></label><br>
-            <input  type="month" 
-                    name="start_date"
-            value="{{ experience.start_date.strftime('%Y-%m') if experience and experience.start_date else '' }}"
-            required>
+            <input type="month" name="start_date"
+                value="{{ training.start_date.strftime('%Y-%m') if training and training.start_date else '' }}"
+                required>
         </div>
-        
+
         <div>
             <label>End Date</label><br>
-            <input  type="month" 
-                    name="end_date"
-            value="{{ experience.end_date.strftime('%Y-%m') if experience and experience.end_date else '' }}">
+            <input type="month" name="end_date"
+                value="{{ training.end_date.strftime('%Y-%m') if training and training.end_date else '' }}">
         </div>
     </div>
 
-    
     <!-- ACTIONS -->
     <div style="display:flex; justify-content:space-between; margin-top:20px;">
 
-        
         <!-- Cancel -->
         <button type="button"
-                onclick="window.location.href='{{ url_for('candidate_routes.view_candidate', id=candidate_id) }}'"
-                style="background-color: rgb(124, 0, 0); color: white; border: none; padding: 8px 14px; border-radius: 6px; cursor: pointer;">
+            onclick="window.location.href='{{ url_for('candidate_routes.view_candidate', id=candidate_id) }}'"
+            style="background-color: rgb(124, 0, 0); color: white; border: none; padding: 8px 14px; border-radius: 6px; cursor: pointer;">
             Cancel
         </button>
 
         <!-- Save -->
-        <button
-        type="submit"
-        style="background-color: rgb(21, 124, 0); color: white; border: none; padding: 8px 14px; border-radius: 6px; cursor: pointer;">
+        <button type="submit"
+            style="background-color: rgb(21, 124, 0); color: white; border: none; padding: 8px 14px; border-radius: 6px; cursor: pointer;">
             Save
         </button>
 
     </div>
 
 </form>
-
 
 {% endblock %}

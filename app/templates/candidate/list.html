@@ -8,59 +8,40 @@
 <div style="display:flex; justify-content:space-between; align-items:center; width:100%; margin-bottom:15px;">
 
     <!-- FILTER -->
-    <form method="GET"
-          action="{{ url_for('candidate_routes.list_candidates') }}"
-          style="display:flex; gap:10px; align-items:center; flex-wrap:wrap;">
+    <form method="GET" action="{{ url_for('candidate_routes.list_candidates') }}"
+        style="display:flex; gap:10px; align-items:center; flex-wrap:wrap;">
 
-        <input type="text"
-               name="name"
-               placeholder="Name"
-               size="40"
-               value="{{ name or '' }}"
-               style="padding:6px;">
+        <input type="text" name="name" placeholder="Name" size="40" value="{{ name or '' }}" style="padding:6px;">
 
-        <input type="text"
-               name="email"
-               placeholder="Email"
-               size="30"
-               value="{{ email or '' }}"
-               style="padding:6px;">
+        <input type="text" name="email" placeholder="Email" size="30" value="{{ email or '' }}" style="padding:6px;">
 
-        <input type="text"
-               name="phone"
-               placeholder="Phone"
-               size="20"
-               value="{{ phone or '' }}"
-               style="padding:6px;">
+        <input type="text" name="phone" placeholder="Phone" size="20" value="{{ phone or '' }}" style="padding:6px;">
 
         <select name="gender" style="padding:6px; width:140px;">
 
             <option value="">All</option>
 
-            <option value="M" {% if gender == 'M' %}selected{% endif %}>
+            <option value="M" {% if gender=='M' %}selected{% endif %}>
                 Male
             </option>
 
-            <option value="F" {% if gender == 'F' %}selected{% endif %}>
+            <option value="F" {% if gender=='F' %}selected{% endif %}>
                 Female
             </option>
 
-            <option value="U" {% if gender == 'U' %}selected{% endif %}>
+            <option value="U" {% if gender=='U' %}selected{% endif %}>
                 Unspecified
             </option>
 
         </select>
-        
-        <button
-        type="submit"
-        style="background-color: rgb(21, 124, 0); color: white; border: none; padding: 8px 14px; border-radius: 6px; cursor: pointer;">
+
+        <button type="submit"
+            style="background-color: rgb(21, 124, 0); color: white; border: none; padding: 8px 14px; border-radius: 6px; cursor: pointer;">
             Filter
         </button>
 
 
-        <button type="button"
-                onclick="window.location.href='{{ url_for('candidate_routes.list_candidates') }}'"
-                style="background-color: #6c757d;
+        <button type="button" onclick="window.location.href='{{ url_for('candidate_routes.list_candidates') }}'" style="background-color: #6c757d;
                     color: white;
                     border: none;
                     padding: 8px 14px;
@@ -99,11 +80,11 @@
 
             <td>
                 {% if c.GENDER == 'M' %}
-                    Male
+                Male
                 {% elif c.GENDER == 'F' %}
-                    Female
+                Female
                 {% else %}
-                    -
+                -
                 {% endif %}
             </td>
 

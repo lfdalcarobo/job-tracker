@@ -13,19 +13,12 @@
 
         <div>
             <label>Name <span style="color:red">*</span></label><br>
-            <input type="text"
-                   name="name"
-                   size="65"
-                   required
-                   value="{{ candidate.NAME if candidate else '' }}">
+            <input type="text" name="name" size="65" required value="{{ candidate.NAME if candidate else '' }}">
         </div>
 
         <div>
             <label>Date of Birth <span style="color:red">*</span></label><br>
-            <input type="date"
-                   name="date_birth"
-                   required
-                   value="{{ candidate.DATE_BIRTH if candidate else '' }}">
+            <input type="date" name="date_birth" required value="{{ candidate.DATE_BIRTH if candidate else '' }}">
         </div>
 
         <div>
@@ -34,15 +27,15 @@
 
                 <option value="" {% if not candidate %}selected{% endif %}></option>
 
-                <option value="F" {% if candidate and candidate.GENDER == 'F' %}selected{% endif %}>
+                <option value="F" {% if candidate and candidate.GENDER=='F' %}selected{% endif %}>
                     Female
                 </option>
 
-                <option value="M" {% if candidate and candidate.GENDER == 'M' %}selected{% endif %}>
+                <option value="M" {% if candidate and candidate.GENDER=='M' %}selected{% endif %}>
                     Male
                 </option>
 
-                <option value="U" {% if candidate and candidate.GENDER == 'U' %}selected{% endif %}>
+                <option value="U" {% if candidate and candidate.GENDER=='U' %}selected{% endif %}>
                     Unspecified
                 </option>
 
@@ -56,20 +49,12 @@
 
         <div>
             <label>Phone <span style="color:red">*</span></label><br>
-            <input type="text"
-                   name="phone"
-                   size="34"
-                   required
-                   value="{{ candidate.PHONE if candidate else '' }}">
+            <input type="text" name="phone" size="34" required value="{{ candidate.PHONE if candidate else '' }}">
         </div>
 
         <div>
             <label>Email <span style="color:red">*</span></label><br>
-            <input type="email"
-                   name="email"
-                   size="65"
-                   required
-                   value="{{ candidate.EMAIL if candidate else '' }}">
+            <input type="email" name="email" size="65" required value="{{ candidate.EMAIL if candidate else '' }}">
         </div>
 
     </div>
@@ -79,18 +64,12 @@
 
         <div>
             <label>Address</label><br>
-            <input type="text"
-                   name="address"
-                   size="44"
-                   value="{{ candidate.ADDRESS if candidate else '' }}">
+            <input type="text" name="address" size="44" value="{{ candidate.ADDRESS if candidate else '' }}">
         </div>
 
         <div>
             <label>City</label><br>
-            <input type="text"
-                   name="city"
-                   size="20"
-                   value="{{ candidate.CITY if candidate else '' }}">
+            <input type="text" name="city" size="20" value="{{ candidate.CITY if candidate else '' }}">
         </div>
 
         <div>
@@ -100,10 +79,10 @@
                 <option value=""></option>
 
                 {% for country in countries %}
-                    <option value="{{ country.ID }}"
-                        {% if candidate and candidate.COUNTRY == country.ID %}selected{% endif %}>
-                        {{ country.NAME }}
-                    </option>
+                <option value="{{ country.ID }}" {% if candidate and candidate.COUNTRY==country.ID %}selected{% endif
+                    %}>
+                    {{ country.NAME }}
+                </option>
                 {% endfor %}
 
             </select>
@@ -114,10 +93,13 @@
     <!-- ROW 4 -->
     <div style="margin-bottom:20px;">
         <label>LinkedIn</label><br>
-        <input type="text"
-               name="linkedin"
-               size="108"
-               value="{{ candidate.LINKEDIN if candidate else '' }}">
+        <input type="text" name="linkedin" size="108" value="{{ candidate.LINKEDIN if candidate else '' }}">
+    </div>
+
+    <!-- ROW 5 -->
+    <div style="margin-bottom:20px;">
+        <label>Cover Letter</label><br>
+        <textarea name="cover_letter" rows="20" cols="106">{{ candidate.COVER_LETTER if candidate else '' }}</textarea>
     </div>
 
     <!-- ACTIONS -->
@@ -125,23 +107,21 @@
 
         <!-- Cancel -->
         {% if candidate %}
-    <button type="button"
+        <button type="button"
             onclick="window.location.href='{{ url_for('candidate_routes.view_candidate', id=candidate.ID) }}'"
             style="background-color: rgb(124, 0, 0); color: white; border: none; padding: 8px 14px; border-radius: 6px; cursor: pointer;">
-        Cancel
-    </button>
-{% else %}
-    <button type="button"
-            onclick="window.location.href='{{ url_for('candidate_routes.list_candidates') }}'"
+            Cancel
+        </button>
+        {% else %}
+        <button type="button" onclick="window.location.href='{{ url_for('candidate_routes.list_candidates') }}'"
             style="background-color: rgb(124, 0, 0); color: white; border: none; padding: 8px 14px; border-radius: 6px; cursor: pointer;">
-        Cancel
-    </button>
-{% endif %}
+            Cancel
+        </button>
+        {% endif %}
 
         <!-- Save -->
-        <button
-        type="submit"
-        style="background-color: rgb(21, 124, 0); color: white; border: none; padding: 8px 14px; border-radius: 6px; cursor: pointer;">
+        <button type="submit"
+            style="background-color: rgb(21, 124, 0); color: white; border: none; padding: 8px 14px; border-radius: 6px; cursor: pointer;">
             Save
         </button>
 

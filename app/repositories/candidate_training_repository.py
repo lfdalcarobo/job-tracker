@@ -11,14 +11,16 @@ def get_trainings_by_candidate(candidate_id):
             CANDIDATE_ID as candidate_id,
             DESCRIPTION as description,
             TRAINING_TYPE_ID as training_type_id,
+            TRAINING_TYPE_NAME(TRAINING_TYPE_ID) as training_name,
             COUNTRY_ID as country_id,
+            COUNTRY_NAME(COUNTRY_ID) as country_name,
             START_DATE as start_date,
             END_DATE as end_date,
             CREATED_AT as created_at,
             UPDATED_AT as updated_at
-        FROM candidate_training  
+        FROM candidate_training
         WHERE CANDIDATE_ID = %s
-        ORDER BY START_DATE DESC
+        ORDER BY START_DATE DESC;
     """, (candidate_id,))
 
     result = cursor.fetchall()

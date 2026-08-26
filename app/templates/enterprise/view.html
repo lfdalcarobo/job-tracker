@@ -8,18 +8,16 @@
 <div style="width:100%; text-align:right; margin-bottom:15px;">
 
 
-    <button 
-    <a class="btn-new-enterprise"
-    type="button"
-    onclick="window.location.href='{{ url_for('enterprise_routes.edit_enterprise', id=enterprise.ID, next='view') }}'"
-    style="background-color: #6163d6;
+    <button <a class="btn-new-enterprise" type="button"
+        onclick="window.location.href='{{ url_for('enterprise_routes.edit_enterprise', id=enterprise.ID, next='view') }}'"
+        style="background-color: #6163d6;
                color: white;
                border: none;
                padding: 8px 14px;
                border-radius: 6px;
                cursor: pointer;">
-    Edit
-    </a>
+        Edit
+        </a>
     </button>
 
 </div>

@@ -19,6 +19,7 @@ def get_all_candidates(name=None, gender=None, email=None, phone=None, date_birt
             CITY,
             COUNTRY_NAME(COUNTRY) AS COUNTRY_NAME,
             LINKEDIN,
+            COVER_LETTER,
             CREATED_AT,
             UPDATED_AT
         FROM
@@ -62,7 +63,7 @@ def get_all_candidates(name=None, gender=None, email=None, phone=None, date_birt
 
 
 # Create candidate
-def create_candidate_db(name, date_birth, gender, phone, email, address, city, country, linkedin):
+def create_candidate_db(name, date_birth, gender, phone, email, address, city, country, linkedin, cover_letter):
 
     connection = get_connection()
     cursor = connection.cursor()
@@ -77,9 +78,10 @@ def create_candidate_db(name, date_birth, gender, phone, email, address, city, c
                     ADDRESS,
                     CITY,
                     COUNTRY,
-                    LINKEDIN)
-        VALUES (CAPFIRST(%s), %s, %s, %s, LOWER(%s), CAPFIRST(%s), CAPFIRST(%s), %s, %s)
-    """, (name, date_birth, gender, phone, email, address, city, country, linkedin))
+                    LINKEDIN,
+                    COVER_LETTER)
+        VALUES (CAPFIRST(%s), %s, %s, %s, LOWER(%s), CAPFIRST(%s), CAPFIRST(%s), %s, %s, %s)
+    """, (name, date_birth, gender, phone, email, address, city, country, linkedin, cover_letter))
 
     connection.commit()
 
@@ -93,7 +95,7 @@ def create_candidate_db(name, date_birth, gender, phone, email, address, city, c
 
 
 # Update candidate
-def update_candidate_db(id, name, date_birth, gender, phone, email, address, city, country, linkedin):
+def update_candidate_db(id, name, date_birth, gender, phone, email, address, city, country, linkedin, cover_letter):
 
     connection = get_connection()
     cursor = connection.cursor()
@@ -109,9 +111,10 @@ def update_candidate_db(id, name, date_birth, gender, phone, email, address, cit
                 ADDRESS = CAPFIRST(%s),
                 CITY = CAPFIRST(%s),
                 COUNTRY = %s,
-                LINKEDIN = %s
+                LINKEDIN = %s,
+                COVER_LETTER = %s
             WHERE ID = %s
-        """, (name, date_birth, gender, phone, email, address, city, country, linkedin, id))
+        """, (name, date_birth, gender, phone, email, address, city, country, linkedin, cover_letter, id))
 
         connection.commit()
 
@@ -143,6 +146,7 @@ def get_candidate_by_id(id):
             COUNTRY,   
             COUNTRY_NAME(COUNTRY) AS COUNTRY_NAME,
             LINKEDIN,
+            COVER_LETTER,
             CREATED_AT,
             UPDATED_AT
         FROM CANDIDATE

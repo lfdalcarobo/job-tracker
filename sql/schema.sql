@@ -467,3 +467,104 @@ INSERT INTO SKILL (DESCRIPTION, SITUATION) VALUES
 ('Project Mgmt PMP', 'A'),
 ('Office Admin', 'A'),
 ('Leadership', 'A');
+
+--Function to get training type name by ID
+DELIMITER $$
+
+CREATE FUNCTION TRAINING_TYPE_NAME(p_training_id INT) /* Function para buscar a descrição training type*/
+RETURNS varchar(40)
+DETERMINISTIC
+READS SQL DATA
+BEGIN
+    DECLARE v_training_name VARCHAR(40);
+    
+    SELECT  DESCRIPTION
+    INTO    v_training_name
+    FROM    training_type
+    WHERE   id = p_training_id;
+    
+    RETURN v_training_name;
+END $$
+
+DELIMITER ;
+
+
+
+--modify the column description in level_language table to have a length of 15 characters
+ALTER TABLE LEVEL_LANGUAGE
+MODIFY COLUMN DESCRIPTION VARCHAR(15) NOT NULL;
+
+
+
+--Insert data into level_language table
+INSERT INTO LEVEL_LANGUAGE (DESCRIPTION, SITUATION) 
+VALUES ('A1','A'),('A2','A'),('B1','A'),('B2','A'),('C1','A'),('C2','A'),('Mother Tongue','A');
+
+
+--Insert data into language table
+INSERT INTO LANGUAGE (DESCRIPTION, SITUATION) 
+VALUES 	('English','A'),
+		('Spanish','A'),
+        ('Portuguese','A'),
+        ('French','A'),
+        ('German','A'),
+        ('Italian','A'),
+        ('Mandarin Chinese','A'),
+        ('Japanese','A'),
+        ('Korean','A'),
+        ('Arabic','A'),
+        ('Russian','A'),
+        ('Hindi','A'),
+        ('Dutch','A'),
+        ('Polish','A'),
+        ('Turkish','A');
+
+
+
+--Function to get level language name by ID
+DELIMITER $$
+
+CREATE FUNCTION LEVEL_LANGUAGE_NAME(p_level_language_id INT) /* Function para buscar a descrição do nível do idioma*/
+RETURNS varchar(15)
+DETERMINISTIC
+READS SQL DATA
+BEGIN
+    DECLARE v_level_language_name VARCHAR(15);
+    
+    SELECT  DESCRIPTION
+    INTO    v_level_language_name
+    FROM    level_language
+    WHERE   id = p_level_language_id;
+    
+    RETURN v_level_language_name;
+END $$
+
+DELIMITER ;
+
+
+
+---Function to get language name by ID
+DELIMITER $$
+
+CREATE FUNCTION LANGUAGE_NAME(p_language_id INT) /* Function para buscar o nome do idioma*/
+RETURNS varchar(20)
+DETERMINISTIC
+READS SQL DATA
+BEGIN
+    DECLARE v_language_name VARCHAR(20);
+    
+    SELECT  DESCRIPTION
+    INTO    v_language_name
+    FROM    language
+    WHERE   id = p_language_id;
+    
+    RETURN v_language_name;
+END $$
+
+DELIMITER ;
+
+
+
+--add a new column to the candidate table to store the cover letter
+ALTER TABLE CANDIDATE
+ADD COLUMN COVER_LETTER VARCHAR(4000) AFTER LINKEDIN;

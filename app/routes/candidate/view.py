@@ -5,6 +5,9 @@ from app.repositories.candidate_experience_repository import (get_experiences_by
 from app.repositories.candidate_training_repository import (get_trainings_by_candidate)
 from app.repositories.skill_repository import get_all_skills
 from app.repositories.candidate_skill_repository import get_skills_by_candidate
+from app.repositories.candidate_language_repository import get_languages_by_candidate
+from app.repositories.language_repository import get_all_languages
+from app.repositories.level_language_repository import get_all_level_languages
 
 
 @candidate_routes.route("/<int:id>")
@@ -20,6 +23,12 @@ def view_candidate(id):
 
     candidate_skills = get_skills_by_candidate(id)
 
+    languages = get_all_languages()
+
+    level_languages = get_all_level_languages()
+
+    candidate_languages = get_languages_by_candidate(id)
+
 
     return render_template(
     "candidate/view.html",
@@ -27,6 +36,9 @@ def view_candidate(id):
     experiences=experiences,
     trainings=trainings,
     skills=skills,
-    candidate_skills=candidate_skills
+    candidate_skills=candidate_skills,
+    languages=languages,
+    level_languages=level_languages,
+    candidate_languages=candidate_languages
 
 )

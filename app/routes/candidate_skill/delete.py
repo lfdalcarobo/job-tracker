@@ -11,10 +11,11 @@ def delete_candidate_skill(candidate_id, id):
 
     flash("Skill successfully removed!", "success")
 
-    # Redireciona de volta para a tela VIEW do candidato atual
+    
     return redirect(
-        url_for(
-            "candidate_routes.view_candidate",
-            id=candidate_id
-        )
+    url_for(
+        "candidate_routes.view_candidate",
+        id=candidate_id,
+        _anchor="skills"  # Rola a página direto para a seção #skills
     )
+)

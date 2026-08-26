@@ -7,6 +7,7 @@ from app.routes.candidate.candidate_routes import candidate_routes
 from app.routes.candidate_experience.candidate_experience_routes import candidate_experience_routes
 from app.routes.candidate_training.candidate_training_routes import candidate_training_routes
 from app.routes.candidate_skill.candidate_skill_routes import candidate_skill_routes
+from app.routes.candidate_language.candidate_language_routes import candidate_language_routes
 
 # app Flask
 app = Flask(__name__)
@@ -21,6 +22,7 @@ app.register_blueprint(candidate_routes)
 app.register_blueprint(candidate_experience_routes)
 app.register_blueprint(candidate_training_routes)
 app.register_blueprint(candidate_skill_routes)
+app.register_blueprint(candidate_language_routes)
 
 # rota principal (home)
 @app.route("/")

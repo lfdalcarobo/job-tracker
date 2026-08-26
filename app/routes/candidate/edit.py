@@ -28,6 +28,7 @@ def edit_candidate(id):
         city = request.form["city"]
         country = request.form["country"] or None
         linkedin = request.form["linkedin"]
+        cover_letter = request.form["cover_letter"]
 
         update_candidate_db(
             id,
@@ -39,7 +40,9 @@ def edit_candidate(id):
             address,
             city,
             country,
-            linkedin
+            linkedin,
+            cover_letter
+
         )
 
         return redirect(url_for("candidate_routes.view_candidate", id=id))

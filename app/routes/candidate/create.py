@@ -18,6 +18,7 @@ def create_candidate():
         city = request.form["city"]
         country = request.form["country"] or None
         linkedin = request.form["linkedin"]
+        cover_letter = request.form["cover_letter"]
 
         new_id = create_candidate_db(
             name,
@@ -28,7 +29,8 @@ def create_candidate():
             address,
             city,
             country,
-            linkedin
+            linkedin,
+            cover_letter
         )
 
         return redirect(url_for("candidate_routes.view_candidate", id=new_id))

@@ -7,21 +7,16 @@
 </h2>
 
 <form method="POST" style="max-width: 600px; margin: 0 auto;">
-    
+
 
     <label>Name <span style="color:red">*</span></label></label>
-    <input type="text"
-           name="name"
-           required
-           style="width:100%; padding:6px;"
-           value="{{ enterprise.NAME if enterprise else '' }}">
+    <input type="text" name="name" required style="width:100%; padding:6px;"
+        value="{{ enterprise.NAME if enterprise else '' }}">
 
     <br><br>
     <label>
-        <input type="checkbox"
-               name="situation"
-               value="A"
-               {% if not enterprise or enterprise.SITUATION|trim == 'A' %}checked{% endif %}>
+        <input type="checkbox" name="situation" value="A" {% if not enterprise or enterprise.SITUATION|trim=='A'
+            %}checked{% endif %}>
         Active
     </label>
 
@@ -31,26 +26,24 @@
     <div style="display:flex; justify-content:space-between; margin-top:20px;">
 
         <!-- Cancel -->
-{% if enterprise %}
-    {% if next_page == 'view' %}
+        {% if enterprise %}
+        {% if next_page == 'view' %}
         {% set cancel_url = url_for('enterprise_routes.view_enterprise', id=enterprise.ID) %}
-    {% else %}
+        {% else %}
         {% set cancel_url = url_for('enterprise_routes.list_enterprises') %}
-    {% endif %}
-{% else %}
-    {% set cancel_url = url_for('enterprise_routes.list_enterprises') %}
-{% endif %}
+        {% endif %}
+        {% else %}
+        {% set cancel_url = url_for('enterprise_routes.list_enterprises') %}
+        {% endif %}
 
-<button type="button"
-        onclick="window.location.href='{{ cancel_url }}'"
-        style="background-color: rgb(124, 0, 0);
+        <button type="button" onclick="window.location.href='{{ cancel_url }}'" style="background-color: rgb(124, 0, 0);
                color: white;
                border: none;
                padding: 8px 14px;
                border-radius: 6px;
                cursor: pointer;">
-    Cancel
-</button>
+            Cancel
+        </button>
 
 
 
@@ -58,9 +51,8 @@
         </button>
 
         <!-- Save -->
-        <button
-        type="submit"
-        style="background-color: rgb(21, 124, 0); color: white; border: none; padding: 8px 14px; border-radius: 6px; cursor: pointer;">
+        <button type="submit"
+            style="background-color: rgb(21, 124, 0); color: white; border: none; padding: 8px 14px; border-radius: 6px; cursor: pointer;">
             Save
         </button>
 
