@@ -1,0 +1,115 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h2 style="text-align:center;">Recruiters</h2>
+
+<!-- ACTION BAR -->
+<div style="display:flex; justify-content:space-between; align-items:center; width:100%; margin-bottom:15px;">
+
+    <!-- FILTER -->
+    <form method="GET" action="{{ url_for('recruiter_routes.list_recruiters') }}"
+        style="display:flex; gap:10px; align-items:center; flex-wrap:wrap;">
+
+        <input type="text" name="name" placeholder="Name" size="30" value="{{ name or '' }}" style="padding:6px;">
+
+        <input type="text" name="email" placeholder="Email" size="20" value="{{ email or '' }}" style="padding:6px;">
+
+        <input type="text" name="phone" placeholder="Phone" size="10" value="{{ phone or '' }}" style="padding:6px;">
+
+        <!-- ENTERPRISE FILTER -->
+        <select name="enterprise_id" style="padding:6px; width:160px;">
+            <option value="">All Enterprises</option>
+            {% for ent in enterprises %}
+            <option value="{{ ent.id if ent.id else ent.ID }}" {% if enterprise_id|string==(ent.id if ent.id else
+                ent.ID)|string %}selected{% endif %}>
+                {{ ent.name if ent.name else ent.NAME }}
+            </option>
+            {% endfor %}
+        </select>
+
+        <!--SITUATION FILTER-->
+        <select name="situation" style="padding:6px 10px; width:80px;">
+
+            <option value="A" {% if situation=='A' %}selected{% endif %}>
+                Active
+            </option>
+
+            <option value="I" {% if situation=='I' %}selected{% endif %}>
+                Inactive
+            </option>
+
+            <option value="" {% if not situation %}selected{% endif %}>
+                All
+            </option>
+
+        </select>
+
+        <button type="submit"
+            style="background-color: rgb(21, 124, 0); color: white; border: none; padding: 8px 14px; border-radius: 6px; cursor: pointer;">
+            Filter
+        </button>
+
+        <button type="button" onclick="window.location.href='{{ url_for('recruiter_routes.list_recruiters') }}'"
+            style="background-color: #6c757d; color: white; border: none; padding: 8px 14px; border-radius: 6px; cursor: pointer;">
+            Clear
+        </button>
+
+    </form>
+
+    <!-- NEW RECRUITER BUTTON -->
+    <button type="button" onclick="window.location.href='{{ url_for('recruiter_routes.create_recruiter') }}'"
+        style="background-color: #6163d6; color: white; border: none; padding: 8px 14px; border-radius: 6px; cursor: pointer;">
+        + New Recruiter
+    </button>
+
+</div>
+
+<br>
+
+<!-- TABLE -->
+<table border="1" cellpadding="8" width="100%">
+
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Phone</th>
+            <th>Type</th>
+            <th>Enterprise</th>
+            <th>Situation</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        {% for r in recruiters %}
+        <tr>
+            <td>{{ r.name }}</td>
+            <td>{{ r.email }}</td>
+            <td>{{ r.phone }}</td>
+            <td>{{ r.type_recruiter_name }}</td>
+            <td>{{ r.enterprise_name }}</td>
+            <td>
+                {% if r.situation == 'A' %}
+                <span style="color: green; font-weight: bold;">Active</span>
+                {% else %}
+                <span style="color: red; font-weight: bold;">Inactive</span>
+                {% endif %}
+            </td>
+            <td>
+                <a href="{{ url_for('recruiter_routes.edit_recruiter', id=r.id) }}">
+                    Edit
+                </a>
+            </td>
+        </tr>
+        {% else %}
+        <tr>
+            <td colspan="7" style="text-align: center; color: #777;">No recruiters found.</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+
+</table>
+
+{% endblock %}

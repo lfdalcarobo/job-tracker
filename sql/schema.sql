@@ -568,3 +568,45 @@ DELIMITER ;
 --add a new column to the candidate table to store the cover letter
 ALTER TABLE CANDIDATE
 ADD COLUMN COVER_LETTER VARCHAR(4000) AFTER LINKEDIN;
+
+
+
+--Insert data into skill table
+INSERT INTO SKILL (DESCRIPTION, SITUATION)
+VALUES 	('Flask','A'),
+		('MySQL','A'),
+        ('NoSQL','A'),
+        ('PL/SQL','A'),
+        ('SQL Server','A'),
+        ('MongoDB','A'),
+        ('PHP','A'),
+        ('Windows Server','A');
+
+
+
+--Insert data into type_recruiter table
+ALTER TABLE TYPE_RECRUITER
+MODIFY COLUMN DESCRIPTION VARCHAR(50) NOT NULL;
+
+--Insert data into type_recruiter table
+INSERT INTO TYPE_RECRUITER (DESCRIPTION, SITUATION)
+VALUES 	('Talent Acquisition Specialist','A'),
+		('Technical Recruiter','A'),
+        ('Tech Lead','A'),
+        ('Hiring Manager','A'),
+        ('Department Manager','A'),
+        ('Executive / Director','A'),
+        ('Agency Recruiter','A'),
+        ('HR Generalist','A');
+
+
+
+--Add email and phone columns to the recruiter table
+ALTER TABLE RECRUITER
+ADD COLUMN EMAIL VARCHAR(150) NOT NULL UNIQUE AFTER NAME,
+ADD COLUMN PHONE VARCHAR(25) NOT NULL AFTER EMAIL;
+
+--Add enterprise_id column to the recruiter table and create a foreign key constraint
+ALTER TABLE RECRUITER ADD COLUMN ENTERPRISE_ID INT NOT NULL;
+ALTER TABLE RECRUITER ADD CONSTRAINT FK_RECRUITER_ENTERPRISE 
+FOREIGN KEY (ENTERPRISE_ID) REFERENCES ENTERPRISE(ID);

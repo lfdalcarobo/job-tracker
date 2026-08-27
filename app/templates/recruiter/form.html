@@ -1,0 +1,104 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h2 style="text-align:center;">
+    {{ "Edit Recruiter" if recruiter else "New Recruiter" }}
+</h2>
+
+<form method="POST" style="max-width:800px; margin:0 auto;">
+
+    <!-- ROW 1: Name -->
+    <div style="display:flex; gap:15px; flex-wrap:wrap; margin-bottom:15px;">
+
+        <div style="flex: 1;">
+            <label>Name <span style="color:red">*</span></label><br>
+            <input type="text" name="name" style="width: 100%; padding: 6px;" required
+                value="{{ recruiter.name if recruiter else '' }}">
+        </div>
+
+
+    </div>
+
+    <!-- ROW 2: Email & Phone -->
+    <div style="display:flex; gap:15px; flex-wrap:wrap; margin-bottom:15px;">
+
+        <div style="flex: 2;">
+            <label>Email <span style="color:red">*</span></label><br>
+            <input type="email" name="email" style="width: 100%; padding: 6px;" required
+                value="{{ recruiter.email if recruiter else '' }}">
+        </div>
+
+        <div style="flex: 1;">
+            <label>Phone <span style="color:red">*</span></label><br>
+            <input type="text" name="phone" style="width: 100%; padding: 6px;" required
+                value="{{ recruiter.phone if recruiter else '' }}">
+        </div>
+
+    </div>
+
+    <!-- ROW 3: Type Recruiter & Enterprise -->
+    <div style="display:flex; gap:15px; flex-wrap:wrap; margin-bottom:20px;">
+
+        <div style="flex: 1;">
+            <label>Type Recruiter <span style="color:red">*</span></label><br>
+            <select name="type_recruiter_id" required style="width: 100%; padding: 6px;">
+                <option value="" disabled {% if not recruiter %}selected{% endif %}>Select Type...</option>
+                {% for t in types %}
+                <option value="{{ t.id if t.id else t.ID }}" {% if recruiter and
+                    (recruiter.type_recruiter_id|string==(t.id if t.id else t.id)|string) %}selected{% endif %}>
+                    {{ t.description if t.description else t.description }}
+                </option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div style="flex: 1;">
+            <label>Enterprise <span style="color:red">*</span></label><br>
+            <select name="enterprise_id" required style="width: 100%; padding: 6px;">
+                <option value="" disabled {% if not recruiter %}selected{% endif %}>Select Enterprise...</option>
+                {% for e in enterprises %}
+                {# Filtra apenas empresas ativas #}
+                {% if (e.situation if e.situation else e.SITUATION) == 'A' %}
+                <option value="{{ e.id if e.id else e.ID }}" {% if recruiter and (recruiter.enterprise_id|string==(e.id
+                    if e.id else e.ID)|string) %}selected{% endif %}>
+                    {{ e.name if e.name else e.NAME }}
+                </option>
+                {% endif %}
+                {% endfor %}
+            </select>
+        </div>
+
+    </div>
+
+    <!-- Situation -->
+    <div>
+        <label style="cursor: pointer;">
+            <input type="checkbox" name="situation" value="A" {% if not recruiter %} checked {% elif
+                (recruiter.situation if recruiter.situation is defined else recruiter.SITUATION)=='A' %} checked {%
+                endif %}>
+            Active
+        </label>
+    </div>
+
+
+    <!-- ACTIONS -->
+    <div style="display:flex; justify-content:space-between; margin-top:20px;">
+
+        <!-- Cancel -->
+        <button type="button" onclick="window.location.href='{{ url_for('recruiter_routes.list_recruiters') }}'"
+            style="background-color: rgb(124, 0, 0); color: white; border: none; padding: 8px 14px; border-radius: 6px; cursor: pointer;">
+            Cancel
+        </button>
+
+        <!-- Save -->
+        <button type="submit"
+            style="background-color: rgb(21, 124, 0); color: white; border: none; padding: 8px 14px; border-radius: 6px; cursor: pointer;">
+            Save
+        </button>
+
+    </div>
+
+</form>
+
+{% endblock %}
