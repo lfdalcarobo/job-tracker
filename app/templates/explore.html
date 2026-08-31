@@ -1,0 +1,144 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h2 style="text-align:center;">Explore Jobs</h2>
+
+<!-- ACTION BAR / FILTERS -->
+<div style="margin-bottom: 20px;">
+    <form method="GET" action="{{ url_for('job_routes.explore_jobs') }}"
+        style="display:flex; gap:10px; align-items:center; flex-wrap:wrap;">
+
+        <!-- POSITION SEARCH -->
+        <input type="text" name="position" placeholder="Search position..." value="{{ position or '' }}"
+            style="padding:8px; flex:1;">
+
+        <!-- COUNTRY FILTER -->
+        <select name="country_id" style="padding:8px; width:120px;">
+            <option value="">All Countries</option>
+            {% for c in countries %}
+            <option value="{{ c.id if c.id else c.ID }}" {% if country_id|string==(c.id if c.id else c.ID)|string
+                %}selected{% endif %}>
+                {{ c.name if c.name else c.NAME }}
+            </option>
+            {% endfor %}
+        </select>
+
+        <!-- CITY FILTER -->
+        <input type="text" name="city" placeholder="City" value="{{ city or '' }}" style="padding:8px; width:150px;">
+
+        <!-- LOCATION TYPE FILTER -->
+        <select name="type_location_id" style="padding: 8px; width:120px;">
+            <option value="">All Locations</option>
+            {% for tl in types_of_locations %}
+            <option value="{{ tl.id if tl.id else tl.ID }}" {% if type_location_id|string==(tl.id if tl.id else
+                tl.ID)|string %}selected{% endif %}>
+                {{ tl.name if tl.name else tl.NAME }}
+            </option>
+            {% endfor %}
+        </select>
+
+        <!-- BUTTONS -->
+        <button type="submit"
+            style="background-color: rgb(21, 124, 0); color: white; border: none; padding: 8px 14px; border-radius: 6px; cursor: pointer;">
+            Filter
+        </button>
+
+        <button type="button" onclick="window.location.href='{{ url_for('job_routes.explore_jobs') }}'"
+            style="background-color: #6c757d; color: white; border: none; padding: 8px 14px; border-radius: 6px; cursor: pointer;">
+            Clear
+        </button>
+    </form>
+</div>
+
+<!-- MASTER-DETAIL CONTAINER (30% / 70%) -->
+<div style="display: flex; gap: 20px; height: 70vh;">
+
+    <!-- LEFT COLUMN: 30% JOB LIST -->
+    <div style="flex: 0 0 30%; overflow-y: auto; border: 1px solid #ddd; border-radius: 8px; background: #fff;">
+        {% for j in jobs %}
+        <!-- Passamos apenas o ID no selectJob -->
+        <div class="job-card" id="job-card-{{ j.id }}" onclick="selectJob({{ j.id }})"
+            style="padding: 15px; border-bottom: 1px solid #eee; cursor: pointer; transition: background 0.2s;">
+
+            <h4 style="margin: 0 0 5px 0; color: #0056b3;">{{ j.position }}</h4>
+            <p style="margin: 0 0 5px 0; font-weight: bold; color: #333;">{{ j.enterprise_name }}</p>
+            <span style="font-size: 0.85em; background: #e9ecef; padding: 2px 6px; border-radius: 4px;">
+                {{ j.type_location_name }}
+            </span>
+            <p style="margin: 5px 0 0 0; font-size: 0.85em; color: #6c757d;">
+                📍 {{ j.city }}{% if j.country_name %}, {{ j.country_name }}{% endif %}
+            </p>
+        </div>
+        {% else %}
+        <p style="padding: 15px; text-align: center; color: #777;">No active jobs found.</p>
+        {% endfor %}
+    </div>
+
+    <!-- RIGHT COLUMN: 70% JOB DETAILS -->
+    <div id="job-detail-panel"
+        style="flex: 1; border: 1px solid #ddd; border-radius: 8px; padding: 25px; overflow-y: auto; background: #fff;">
+        {% if jobs|length > 0 %}
+        <div id="detail-content">
+            <!-- Preenchido via JS -->
+        </div>
+        {% else %}
+        <p style="color: #777; text-align: center; margin-top: 50px;">Select a job on the left to view details.</p>
+        {% endif %}
+    </div>
+
+</div>
+
+<!-- JAVASCRIPT PARA ALTERNAR A VISUALIZAÇÃO -->
+<script>
+    const jobs = {{ jobs | tojson }};
+
+    function renderJobDetail(job) {
+        if (!job) return;
+
+        const container = document.getElementById('detail-content');
+        container.innerHTML = `
+            <div style="display:flex; justify-content:space-between; align-items:flex-start; border-bottom: 1px solid #eee; padding-bottom: 15px; margin-bottom: 15px;">
+                <div>
+                    <h2 style="margin:0 0 10px 0; color:#0056b3;">${job.position}</h2>
+                    <h3 style="margin:0 0 10px 0; color:#555;">${job.enterprise_name}</h3>
+                    <p style="margin:0; color:#6c757d;">
+                        📍 ${job.city}${job.country_name ? ', ' + job.country_name : ''} 
+                        | 💻 ${job.type_location_name}
+                    </p>
+                </div>
+                <button onclick="alert('Application functionality coming soon!')" 
+                    style="background-color: #0056b3; color: white; border: none; padding: 10px 20px; border-radius: 6px; font-weight: bold; cursor: pointer;">
+                    Apply Now
+                </button>
+            </div>
+            
+            <h4>Job Description</h4>
+            <div style="white-space: pre-line; line-height: 1.6; color: #333;">
+                ${job.description ? job.description : 'No description provided.'}
+            </div>
+        `;
+    }
+
+    function selectJob(jobId) {
+        // Busca o objeto da vaga dentro do array global jobs
+        const selectedJob = jobs.find(j => j.id === jobId);
+        if (selectedJob) {
+            renderJobDetail(selectedJob);
+
+            // Destaque visual do card selecionado na lista
+            document.querySelectorAll('.job-card').forEach(card => card.style.background = '#fff');
+            const activeCard = document.getElementById(`job-card-${jobId}`);
+            if (activeCard) activeCard.style.background = '#eef5ff';
+        }
+    }
+
+    // Carrega o primeiro job da lista por padrão
+    document.addEventListener("DOMContentLoaded", function () {
+        if (jobs.length > 0) {
+            selectJob(jobs[0].id);
+        }
+    });
+</script>
+
+{% endblock %}

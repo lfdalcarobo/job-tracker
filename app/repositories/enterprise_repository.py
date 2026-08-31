@@ -112,3 +112,23 @@ def get_enterprise_by_id(id):
     connection.close()
 
     return enterprise
+
+# Get active enterprises
+def get_active_enterprises():
+    connection = get_connection()
+    cursor = connection.cursor(dictionary=True)
+
+    cursor.execute("""
+        SELECT 
+            ID as id,
+            NAME as name,
+            SITUATION as situation
+        FROM ENTERPRISE
+        WHERE SITUATION = 'A'
+        ORDER BY NAME ASC
+    """)
+    result = cursor.fetchall()
+
+    cursor.close()
+    connection.close()
+    return result

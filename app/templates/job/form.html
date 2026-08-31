@@ -1,0 +1,123 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h2 style="text-align:center;">
+    {{ "Edit Job" if job else "New Job" }}
+</h2>
+
+<form method="POST" style="max-width:800px; margin:0 auto;">
+
+    <!-- ROW 1: Position & Enterprise -->
+    <div style="display:flex; gap:15px; flex-wrap:wrap; margin-bottom:15px;">
+
+        <div style="flex: 2;">
+            <label>Position <span style="color:red">*</span></label><br>
+            <input type="text" name="position" style="width: 100%; padding: 6px;" required
+                value="{{ job.position if job else '' }}">
+        </div>
+
+        <div style="flex: 1.5;">
+            <label>Enterprise <span style="color:red">*</span></label><br>
+            <select name="enterprise_id" required style="width: 100%; padding: 6px;">
+                <option value="" disabled {% if not job %}selected{% endif %}>Select Enterprise...</option>
+                {% for e in enterprises %}
+                <option value="{{ e.id if e.id else e.ID }}" {% if job and (job.enterprise_id|string==(e.id if e.id else
+                    e.ID)|string) %}selected{% endif %}>
+                    {{ e.name if e.name else e.NAME }}
+                </option>
+                {% endfor %}
+            </select>
+        </div>
+
+    </div>
+
+    <!-- ROW 2: Location Type, City & Country -->
+    <div style="display:flex; gap:15px; flex-wrap:wrap; margin-bottom:15px;">
+
+        <div style="flex: 1;">
+            <label>Country <span style="color:red">*</span></label><br>
+            <select name="country_id" required style="width: 100%; padding: 6px;">
+                <option value="" disabled {% if not job %}selected{% endif %}>Select Country...</option>
+                {% for c in countries %}
+                <option value="{{ c.id if c.id else c.ID }}" {% if job and (job.country_id|string==(c.id if c.id else
+                    c.ID)|string) %}selected{% endif %}>
+                    {{ c.name if c.name else c.NAME }}
+                </option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div style="flex: 1;">
+            <label>City </label><br>
+            <input type="text" name="city" style="width: 100%; padding: 6px;" value="{{ job.city if job else '' }}">
+        </div>
+
+        <div style="flex: 1;">
+            <label>Type Location <span style="color:red">*</span></label><br>
+            <select name="type_location_id" required style="width: 100%; padding: 6px;">
+                <option value="" disabled {% if not job %}selected{% endif %}>Select Type...</option>
+                {% for tl in types_of_locations %}
+                <option value="{{ tl.id if tl.id else tl.ID }}" {% if job and (job.type_location_id|string==(tl.id if
+                    tl.id else tl.ID)|string) %}selected{% endif %}>
+                    {{ tl.name if tl.name else tl.NAME }}
+                </option>
+                {% endfor %}
+            </select>
+        </div>
+
+    </div>
+
+    <!-- ROW 3: Opening Date & Closing Date -->
+    <div style="display:flex; gap:15px; flex-wrap:wrap; margin-bottom:15px;">
+
+        <div style="flex: 1;">
+            <label>Date Opening<span style="color:red">*</span></label><br>
+            <input type="date" name="date_opening" required style="width: 100%; padding: 6px;"
+                value="{{ job.date_opening if job else '' }}">
+        </div>
+
+        <div style="flex: 1;">
+            <label>Date Closing</label><br>
+            <input type="date" name="date_closing" style="width: 100%; padding: 6px;"
+                value="{{ job.date_closing if job else '' }}">
+        </div>
+
+    </div>
+
+    <!-- ROW 4: Situation (Checkbox) -->
+    <div style="margin-bottom:15px;">
+        <label style="cursor: pointer;">
+            <input type="checkbox" name="situation" value="A" {% if not job %} checked {% elif (job.situation if
+                job.situation is defined else job.SITUATION)=='A' %} checked {% endif %}>
+            Active
+        </label>
+    </div>
+
+    <!-- ROW 5: Description -->
+    <div style="margin-bottom:20px;">
+        <label>Description<span style="color:red">*</span></label><br>
+        <textarea name="description" required rows="20"
+            style="width: 100%; padding: 6px;">{{ job.description if job else '' }}</textarea>
+    </div>
+
+    <!-- ACTIONS -->
+    <div style="display:flex; justify-content:space-between; margin-top:20px;">
+
+        <!-- Cancel -->
+        <button type="button" onclick="window.location.href='{{ url_for('job_routes.list_jobs') }}'"
+            style="background-color: rgb(124, 0, 0); color: white; border: none; padding: 8px 14px; border-radius: 6px; cursor: pointer;">
+            Cancel
+        </button>
+
+        <!-- Save -->
+        <button type="submit"
+            style="background-color: rgb(21, 124, 0); color: white; border: none; padding: 8px 14px; border-radius: 6px; cursor: pointer;">
+            Save
+        </button>
+
+    </div>
+
+</form>
+
+{% endblock %}

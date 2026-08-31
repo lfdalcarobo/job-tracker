@@ -1,129 +1,173 @@
-from flask import Blueprint, request, jsonify
-from app.database import get_connection
+from flask import Blueprint, render_template, request, redirect, url_for, flash
+from app.repositories.job_repository import (
+    get_all_jobs, 
+    get_job_by_id, 
+    insert_job, 
+    update_job
+)
+from app.repositories.type_location_repository import get_all_types_of_locations
+from app.repositories.country_repository import get_all_countries
+from app.repositories.enterprise_repository import get_all_enterprises, get_active_enterprises
 
-job_routes = Blueprint("job_routes", __name__)
+job_routes = Blueprint('job_routes', __name__)
 
 
-# CREATE - criar job
+# LIST JOBS
+@job_routes.route('/jobs/list', methods=['GET'])
+def list_jobs():
+    position = request.args.get('position', '')
+    description = request.args.get('description', '')
+    type_location_id = request.args.get('type_location_id', '')
+    city = request.args.get('city', '')
+    country_id = request.args.get('country_id', '')
+    date_opening = request.args.get('date_opening', '')
+    date_closing = request.args.get('date_closing', '')
+    enterprise_id = request.args.get('enterprise_id', '')
 
-@job_routes.route("/job", methods=["POST"])
+    # SE SITUATION NÃO VIER NA URL, O PADRÃO SERÁ 'A' (ATIVAS)
+    # SE VIER VAZIO (EX: QUANDO SELECIONA 'ALL'), PERMANECE VAZIO
+    situation = request.args.get('situation', 'A' if 'situation' not in request.args else '')
+
+    jobs = get_all_jobs(
+        position=position if position else None,
+        description=description if description else None,
+        type_location_id=type_location_id if type_location_id else None,
+        city=city if city else None,
+        country_id=country_id if country_id else None,
+        date_opening=date_opening if date_opening else None,
+        date_closing=date_closing if date_closing else None,
+        enterprise_id=enterprise_id if enterprise_id else None,
+        situation=situation if situation else None
+    )
+
+    types_of_locations = get_all_types_of_locations()
+    countries = get_all_countries()
+    enterprises = get_active_enterprises()
+
+    return render_template(
+        'job/list.html',
+        jobs=jobs,
+        types_of_locations=types_of_locations,
+        countries=countries,
+        enterprises=enterprises,
+        position=position,
+        description=description,
+        type_location_id=type_location_id,
+        city=city,
+        country_id=country_id,
+        date_opening=date_opening,
+        date_closing=date_closing,
+        enterprise_id=enterprise_id,
+        situation=situation
+    )
+
+
+# CREATE JOB
+@job_routes.route('/job/new', methods=['GET', 'POST'])
 def create_job():
-    data = request.json
+    if request.method == 'POST':
+        position = request.form.get('position')
+        description = request.form.get('description')
+        type_location_id = request.form.get('type_location_id')
+        city = request.form.get('city')
+        country_id = request.form.get('country_id')
+        date_opening = request.form.get('date_opening')
+        date_closing = request.form.get('date_closing')
+        enterprise_id = request.form.get('enterprise_id')
+        
+        # Tratamento correto do checkbox de situação
+        situation = 'A' if request.form.get('situation') == 'A' else 'I'
 
-    connection = get_connection()
-    cursor = connection.cursor()
+        try:
+            insert_job(
+                position, description, type_location_id, city, 
+                country_id, date_opening, date_closing, enterprise_id, situation
+            )
+            flash('Job created successfully!', 'success')
+            return redirect(url_for('job_routes.list_jobs'))
+        except Exception as e:
+            flash(f'Error creating job: {str(e)}', 'error')
 
-    query = """
-            INSERT INTO job (POSITION,
-                             DESCRIPTION,
-                             DATE_OPENING,
-                             DATE_CLOSING,
-                             ENTERPRISE_ID)
-            VALUES (%s, %s, %s, %s, %s)
-            """
-
-    values = (
-        data.get("position"),
-        data.get("description"),
-        data.get("date_opening"),
-        data.get("date_closing"),
-        data.get("enterprise_id")
+    types_of_locations = get_all_types_of_locations()
+    countries = get_all_countries()
+    enterprises = get_active_enterprises()  # Carrega apenas empresas ativas no formulário
+    
+    return render_template(
+        'job/form.html', 
+        job=None, 
+        types_of_locations=types_of_locations, 
+        countries=countries, 
+        enterprises=enterprises
     )
 
-    cursor.execute(query, values)
-    connection.commit()
 
-    job_id = cursor.lastrowid
+# EDIT JOB
+@job_routes.route('/job/edit/<int:id>', methods=['GET', 'POST'])
+def edit_job(id):
+    job = get_job_by_id(id)
 
-    cursor.close()
-    connection.close()
+    if request.method == 'POST':
+        position = request.form.get('position')
+        description = request.form.get('description')
+        type_location_id = request.form.get('type_location_id')
+        city = request.form.get('city')
+        country_id = request.form.get('country_id')
+        date_opening = request.form.get('date_opening')
+        date_closing = request.form.get('date_closing')
+        enterprise_id = request.form.get('enterprise_id')
+        
+        # Tratamento correto do checkbox de situação
+        situation = 'A' if request.form.get('situation') == 'A' else 'I'
 
-    return jsonify({"message": "Job created", "id": job_id}), 201
+        try:
+            update_job(
+                id, position, description, type_location_id, city, 
+                country_id, date_opening, date_closing, enterprise_id, situation
+            )
+            flash('Job updated successfully!', 'success')
+            return redirect(url_for('job_routes.list_jobs'))
+        except Exception as e:
+            flash(f'Error updating job: {str(e)}', 'error')
 
-
-
-# READ - listar todos
-@job_routes.route("/job", methods=["GET"])
-def get_jobs():
-    connection = get_connection()
-    cursor = connection.cursor(dictionary=True)
-
-    cursor.execute("""
-        SELECT
-            ID,
-            POSITION,
-            DESCRIPTION,
-            DATE_OPENING,
-            DATE_CLOSING,
-            ENTERPRISE_ID,
-            SITUATION,
-            CREATED_AT,
-            UPDATED_AT
-        FROM job
-    """)
-
-    jobs = cursor.fetchall()
-
-    cursor.close()
-    connection.close()
-
-    return jsonify(jobs)
-
-
-# READ - por ID
-@job_routes.route("/job/<int:job_id>", methods=["GET"])
-def get_job(job_id):
-    connection = get_connection()
-    cursor = connection.cursor(dictionary=True)
-
-    cursor.execute("""
-        SELECT * FROM job WHERE ID = %s
-    """, (job_id,))
-
-    job = cursor.fetchone()
-
-    cursor.close()
-    connection.close()
-
-    if job:
-        return jsonify(job)
-
-    return jsonify({"message": "Job not found"}), 404
-
-
-# UPDATE - atualizar job
-@job_routes.route("/job/<int:job_id>", methods=["PUT"])
-def update_job(job_id):
-    data = request.json
-
-    connection = get_connection()
-    cursor = connection.cursor()
-
-    query = """
-        UPDATE job
-        SET POSITION = %s,
-            DESCRIPTION = %s,
-            DATE_OPENING = %s,
-            DATE_CLOSING = %s,
-            ENTERPRISE_ID = %s,
-            SITUATION = %S
-        WHERE ID = %s
-    """
-
-    values = (
-        data.get("position"),
-        data.get("description"),
-        data.get("date_opening"),
-        data.get("date_closing"),
-        data.get("enterprise_id"),
-        data.get("situation"),
-        job_id
+    types_of_locations = get_all_types_of_locations()
+    countries = get_all_countries()
+    enterprises = get_active_enterprises()  # Carrega apenas empresas ativas no formulário
+    
+    return render_template(
+        'job/form.html', 
+        job=job, 
+        types_of_locations=types_of_locations, 
+        countries=countries, 
+        enterprises=enterprises
     )
 
-    cursor.execute(query, values)
-    connection.commit()
+# EXPLORE JOBS (Visão estilo Master-Detail 30/70 para Candidatos)
+@job_routes.route('/jobs/explore', methods=['GET'])
+def explore_jobs():
+    position = request.args.get('position', '')
+    country_id = request.args.get('country_id', '')
+    city = request.args.get('city', '')
+    type_location_id = request.args.get('type_location_id', '')
 
-    cursor.close()
-    connection.close()
+    # Traz apenas vagas ATIVAS para a visão de candidatos
+    jobs = get_all_jobs(
+        position=position if position else None,
+        country_id=country_id if country_id else None,
+        city=city if city else None,
+        type_location_id=type_location_id if type_location_id else None,
+        situation='A'
+    )
 
-    return jsonify({"message": "Job updated"})
+    types_of_locations = get_all_types_of_locations()
+    countries = get_all_countries()
+
+    return render_template(
+        'explore.html',
+        jobs=jobs,
+        types_of_locations=types_of_locations,
+        countries=countries,
+        position=position,
+        country_id=country_id,
+        city=city,
+        type_location_id=type_location_id
+    )

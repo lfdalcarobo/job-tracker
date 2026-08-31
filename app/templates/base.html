@@ -123,6 +123,10 @@
 
             <nav>
 
+                <a href="{{ url_for('job_routes.explore_jobs') }}">
+                    Home
+                </a>
+
                 <a href="{{ url_for('candidate_routes.list_candidates') }}">
                     Candidates
                 </a>
@@ -135,7 +139,7 @@
                     Recruiters
                 </a>
 
-                <a href="#">
+                <a href="{{ url_for('job_routes.list_jobs') }}">
                     Jobs
                 </a>
 
